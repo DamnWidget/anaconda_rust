@@ -42,8 +42,10 @@ class RustCLint(object):
 
         current_dir = os.getcwd()
         os.chdir(os.path.dirname(self.filename))
-        args = shlex.split(
-            'rustc -Zparse-only {0}'.format(os.path.basename(self.filename)))
+        args = shlex.split('{0} -Zparse-only {1}'.format(
+            self.settings.get('rustc_binary_path', 'rustc'),
+            os.path.basename(self.filename))
+        )
         proc = spawn(args, stdout=PIPE, stderr=PIPE, cwd=os.getcwd())
         _, self.output = proc.communicate()
         if sys.version_info >= (3, 0):

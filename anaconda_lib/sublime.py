@@ -22,14 +22,14 @@ def run_linter(view=None):
         anaconda_sublime.erase_lint_marks(view)
         return
 
-    settings = {
-        'rustc_binary_path': get_settings(view, 'rustc_binary_path', 'rustc')
-    }
+    rustc = get_settings(view, 'rustc_binary_path', 'rustc')
+    if rustc == '':
+        rustc = 'rustc'
 
     data = {
         'vid': view.id(),
         'code': '',
-        'settings': settings,
+        'settings': {'rustc_binary_path': rustc},
         'filename': view.file_name(),
         'method': 'lint',
         'handler': 'rust_linter'

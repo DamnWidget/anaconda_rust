@@ -32,5 +32,17 @@
 		Note: if this setting is left empty Anaconda will tr to use
 		the environment variable RUST_SRC_PATH
 	*/
-	"rust_src_path": ""
+	"rust_src_path": "",
+
+	/*
+		Set this to false if you don't want anaconda to format
+		your files when you save them
+	*/
+	"rust_format_on_save": true,
+
+	/*
+		This id the default time that anaconda will wait for rustfmt to finish
+		formatting files, after that time it will rturn a timeout failure
+	*/
+	"rust_rustfmt_timeout": 1  // seconds
 }
