@@ -4,8 +4,6 @@
 
 from functools import partial
 
-import sublime as st3_sublime
-
 from .helpers import get_settings, active_view
 from .anaconda_plugin import anaconda_sublime, Worker, Callback
 
@@ -28,10 +26,9 @@ def run_linter(view=None):
         'rustc_binary_path': get_settings(view, 'rustc_binary_path', 'rustc')
     }
 
-    text = view.substr(st3_sublime.Region(0, view.size()))
     data = {
         'vid': view.id(),
-        'code': text,
+        'code': '',
         'settings': settings,
         'filename': view.file_name(),
         'method': 'lint',

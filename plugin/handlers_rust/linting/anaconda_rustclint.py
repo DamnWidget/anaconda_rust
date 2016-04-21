@@ -22,12 +22,12 @@ class RustCLint(object):
 
     # regexp groups to parse output
     _regexp = re.compile(
-        r'^(?P<file>.+?):(?P<line>\\d+):(?P<col>\\d+):\\s+'
-        r'(?P<line_to>\\d+):(?P<col_to>\\d+)\\s'
-        r'(?:(?P<error>(error|fatal error))|(?P<warning>warning)|'
-        r'(?P<info>note|help)):\\s+(?P<message>.+)'
+        '^(?P<file>.+?):(?P<line>\\d+):(?P<col>\\d+):\\s+'
+        '(?P<line_to>\\d+):(?P<col_to>\\d+)\\s'
+        '(?:(?P<error>(error|fatal error))|(?P<warning>warning)|'
+        '(?P<info>note|help)):\\s+(?P<message>.+)',
+        re.MULTILINE | re.UNICODE
     )
-
 
     def __init__(self, filename, settings):
         self.filename = filename
@@ -40,17 +40,24 @@ class RustCLint(object):
         """Execute the linting process
         """
 
-        args = shlex.split('rustc -Zparse-only {0}'.format(self.filename))
+        current_dir = os.getcwd()
+        os.chdir(os.path.dirname(self.filename))
+        args = shlex.split(
+            'rustc -Zparse-only {0}'.format(os.path.basename(self.filename)))
         proc = spawn(args, stdout=PIPE, stderr=PIPE, cwd=os.getcwd())
         _, self.output = proc.communicate()
         if sys.version_info >= (3, 0):
             self.output = self.output.decode('utf8')
 
-    def parse_error(self):
+        os.chdir(current_dir)
+
+    def parse_errors(self):
         """Parse the output given by rustc -Zparse_only
         """
 
         errors = {'E': [], 'W': [], 'V': []}
+        import logging
+        logging.info(self.output)
         if self.output != '':
             for match in self._regexp.finditer(self.output):
                 dict_match = match.groupdict()
@@ -66,3 +73,16 @@ class RustCLint(object):
                 })
 
         return errors
+
+    def _infer_severity(self, match):
+        """Infer the error severity from the result match
+        """
+
+        _severity = 'error'
+        _type_dict = {'error': 'E', 'warning': 'W', 'info': 'V'}
+        if match['warning'] is not None:
+            _severity = 'warning'
+        elif match['info'] is not None:
+            _severity = 'info'
+
+        return _severity, _type_dict[_severity]

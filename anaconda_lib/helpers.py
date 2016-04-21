@@ -20,6 +20,7 @@ def get_settings(view, name, default=None):
 # reuse anaconda helper functions
 active_view = anaconda_helpers.active_view
 get_view = anaconda_helpers.get_view
+check_linting = anaconda_helpers.check_linting
 
 
-__all__ = ['get_setings', 'active_view', 'get_view']
+__all__ = ['get_settings', 'active_view', 'get_view']
