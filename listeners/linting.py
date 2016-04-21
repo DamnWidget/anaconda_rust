@@ -16,6 +16,4 @@ class BackgroundLinter(linting.BackgroundLinter):
         self.check_auto_lint = True
 
     def on_modified(self, view):
-        """
-        """
         pass

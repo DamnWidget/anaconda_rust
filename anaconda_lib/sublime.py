@@ -25,7 +25,7 @@ def run_linter(view=None):
         return
 
     settings = {
-        'rustc_binary_path': get_settings(view, 'rustc_binary_path', '')
+        'rustc_binary_path': get_settings(view, 'rustc_binary_path', 'rustc')
     }
 
     text = view.substr(st3_sublime.Region(0, view.size()))

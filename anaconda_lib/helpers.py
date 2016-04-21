@@ -7,7 +7,7 @@ import sublime
 from .anaconda_plugin import anaconda_helpers
 
 
-def get_setings(view, name, default=None):
+def get_settings(view, name, default=None):
     """Get settings
     """
 

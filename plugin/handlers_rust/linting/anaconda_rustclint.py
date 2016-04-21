@@ -6,6 +6,7 @@
 """
 
 import os
+import re
 import sys
 import shlex
 import subprocess
@@ -18,6 +19,15 @@ PIPE = subprocess.PIPE
 class RustCLint(object):
     """RustCLint class for AnacondaRUST
     """
+
+    # regexp groups to parse output
+    _regexp = re.compile(
+        r'^(?P<file>.+?):(?P<line>\\d+):(?P<col>\\d+):\\s+'
+        r'(?P<line_to>\\d+):(?P<col_to>\\d+)\\s'
+        r'(?:(?P<error>(error|fatal error))|(?P<warning>warning)|'
+        r'(?P<info>note|help)):\\s+(?P<message>.+)'
+    )
+
 
     def __init__(self, filename, settings):
         self.filename = filename
@@ -42,11 +52,17 @@ class RustCLint(object):
 
         errors = {'E': [], 'W': [], 'V': []}
         if self.output != '':
-            split_lines = self.output.splitlines()
-            for line in split_lines:
-                if 'warning: the option `Z`' in line:
-                    # ignore this line
-                    continue
+            for match in self._regexp.finditer(self.output):
+                dict_match = match.groupdict()
+                error_severity, error_type = self._infer_severity(dict_match)
+                errors[error_type].append({
+                    'line': dict_match['line'],
+                    'offset': dict_match['col'],
+                    'raw_message': dict_match['message'],
+                    'code': 0,
+                    'message': '[{0}] rustc ({1}): {2}'.format(
+                        error_type, error_severity, dict_match['message']
+                    )
+                })
 
-
-
+        return errors
