@@ -18,11 +18,11 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
     """Execute rustfmt command in a file
     """
 
-    output = None
+    data = None
 
     def run(self, edit):
 
-        if self.output is None:
+        if self.data is None:
             try:
                 messages = {
                     'start': 'Auto formatting file...',
@@ -34,9 +34,16 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
                 self.pbar.start()
                 self.view.set_read_only(True)
 
+                rustfmt = get_settings(
+                        self.view, 'rustfmt_binary_path', 'rustfmt'
+                )
+                if rustfmt == '':
+                    rustfmt = 'rustfmt'
+
                 data = {
                     'vid': self.view.id(),
                     'filename': self.view.file_name(),
+                    'settings': {'rustfmt_binary_path': rustfmt},
                     'method': 'format',
                     'handler': 'rustfmt'
                 }
@@ -70,10 +77,10 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
         """Prepare the returned data to overwrite our buffer
         """
 
+        self.data = data
         self.pbar.terminate()
         self.view.set_read_only(False)
-        self.output = data['output']
-        sublime.active_window().run_command(self.name())
+        self.view.run_command('anaconda_rust_fmt')
 
     def update_buffer(self, edit):
         """Update and reload the buffer
@@ -81,10 +88,10 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
 
         code = self.view.substr(sublime.Region(0, self.view.size()))
         view = get_window_view(self.data['vid'])
-        if code != self.output:
+        if code != self.data.get('output'):
             region = sublime.Region(0, view.size())
-            view.replace(edit, region, self.output)
+            view.replace(edit, region, self.data.get('output'))
             if get_settings(view, 'rust_format_on_save'):
                 sublime.set_timeout(lambda: view.run_command('save'), 0)
 
-        self.output = None
+        self.data = None

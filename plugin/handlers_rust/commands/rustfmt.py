@@ -39,8 +39,9 @@ class RustFMT(Command):
             })
         except Exception as error:
             logging.error(error)
-            trback = traceback.format.exc()
+            trback = traceback.format_exc()
             logging.debug(trback)
+            logging.debug('Settings: {0}'.format(self.settings))
             print(trback)
             self.callback({
                 'success': False,
@@ -60,5 +61,9 @@ class RustFMT(Command):
         output, err = proc.communicate()
         if sys.version_info >= (3, 0):
             output = output.decode('utf8')
+            err = err.decode('utf8')
 
-        return output
+        if err != '':
+            raise(err)
+
+        return '\n'.join(output.splitlines()[2:])
