@@ -4,6 +4,7 @@
 
 from .rustfmt import RustFMT
 from .rustc import RustCLinter
+from .autocomplete import AutoComplete
 
 
-__all__ = ['RustFMT', 'RustCLinter']
+__all__ = ['RustFMT', 'RustCLinter', 'AutoComplete']

@@ -4,7 +4,8 @@
 
 import sublime_plugin
 
-from ..anaconda_lib.helpers import get_settings, is_code
+from ..anaconda_lib.helpers import get_settings
+from ..anaconda_lib.anaconda_plugin import is_code
 
 
 class AutoRustFmtListener(sublime_plugin.EventListener):

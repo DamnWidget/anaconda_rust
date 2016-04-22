@@ -1,0 +1,6 @@
+{
+	"auto_complete_triggers": [
+        {"selector": "source.rust - string - comment", "characters": "."},
+        {"selector": "source.rust - string - comment", "characters": ":"}
+    ]
+}

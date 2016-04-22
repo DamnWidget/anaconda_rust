@@ -4,5 +4,9 @@
 
 from .linting import BackgroundLinter
 from .autofmt import AutoRustFmtListener
+from .completion import RustCompletionEventListener
 
-__all__ = ['BackgroundLinter', 'AutoRustFmtListener']
+__all__ = [
+    'BackgroundLinter', 'AutoRustFmtListener',
+    'RustCompletionEventListener'
+]
