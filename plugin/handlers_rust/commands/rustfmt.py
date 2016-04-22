@@ -38,6 +38,7 @@ class RustFMT(Command):
                 'vid': self.vid
             })
         except Exception as error:
+            print('Me la comes doblada !!!!!!!!!!!!!!!!!!!!!!!!111')
             logging.error(error)
             trback = traceback.format_exc()
             logging.debug(trback)
@@ -63,7 +64,10 @@ class RustFMT(Command):
             output = output.decode('utf8')
             err = err.decode('utf8')
 
+        # delete temporary file
+        os.remove(self.filename)
+
         if err != '':
-            raise(err)
+            raise Exception(err)
 
         return '\n'.join(output.splitlines()[2:])

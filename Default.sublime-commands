@@ -1,0 +1,6 @@
+[
+	{
+		"caption": "Anaconda: Format Rust Document Style",
+		"command": "anaconda_rust_fmt"
+	}
+]

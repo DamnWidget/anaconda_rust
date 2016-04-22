@@ -2,7 +2,9 @@
 # Copyright (C) 2016 - Oscar Campos <oscar.campos@member.fsf.org>
 # This program is Free Software see LICENSE file for details
 
+import os
 import logging
+import tempfile
 import traceback
 
 import sublime
@@ -40,9 +42,18 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
                 if rustfmt == '':
                     rustfmt = 'rustfmt'
 
+                self.code = self.view.substr(
+                    sublime.Region(0, self.view.size())
+                )
+
+                # the JonServer deletes the temp file so we don't worry
+                fd, path = tempfile.mkstemp(suffix=".rs")
+                with os.fdopen(fd, "w") as tmp:
+                    tmp.write(self.code)
+
                 data = {
                     'vid': self.view.id(),
-                    'filename': self.view.file_name(),
+                    'filename': path,
                     'settings': {'rustfmt_binary_path': rustfmt},
                     'method': 'format',
                     'handler': 'rustfmt'
@@ -86,12 +97,12 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
         """Update and reload the buffer
         """
 
-        code = self.view.substr(sublime.Region(0, self.view.size()))
         view = get_window_view(self.data['vid'])
-        if code != self.data.get('output'):
+        if self.code != self.data.get('output'):
             region = sublime.Region(0, view.size())
             view.replace(edit, region, self.data.get('output'))
             if get_settings(view, 'rust_format_on_save'):
                 sublime.set_timeout(lambda: view.run_command('save'), 0)
 
         self.data = None
+        self.code = None

@@ -3,5 +3,6 @@
 # This program is Free Software see LICENSE file for details
 
 from .linting import BackgroundLinter
+from .autofmt import AutoRustFmtListener
 
-__all__ = ['BackgroundLinter']
+__all__ = ['BackgroundLinter', 'AutoRustFmtListener']

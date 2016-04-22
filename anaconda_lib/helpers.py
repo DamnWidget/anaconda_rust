@@ -18,10 +18,13 @@ def get_settings(view, name, default=None):
     return view.settings().get(name, plugin_settings.get(name, default))
 
 # reuse anaconda helper functions
+is_code = anaconda_helpers.is_code
 get_view = anaconda_helpers.get_view
 active_view = anaconda_helpers.active_view
 check_linting = anaconda_helpers.check_linting
 get_window_view = anaconda_helpers.get_window_view
 
 
-__all__ = ['get_settings', 'active_view', 'get_view', 'get_window_view']
+__all__ = [
+    'is_code', 'get_settings', 'active_view', 'get_view', 'get_window_view'
+]
