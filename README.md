@@ -145,8 +145,7 @@ AnacondaRUST settings to prevent future problems.
 
 ## Linter Options
 
-AnacondaRUST (obviously) includes a linter for Rust code, the linter runs asynchronous as usual so it will be relatively fast even
-to run it in `always` fashion, but is up to you to run it with another behavior you like.
+AnacondaRUST (obviously) includes a linter for Rust code, the linter runs asynchronous as usual, it runs every time that you save your file.
 
 ### Disable the linter
 
