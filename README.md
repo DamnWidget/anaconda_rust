@@ -19,12 +19,13 @@ is:
 1. [Anaconda](https://github.com/DamnWidget/anaconda) plugin for Sublime Text 3
 2. Rust compiler ([rustc](https://www.rust-lang.org/)) and cargo
 3. [Racer](https://github.com/phildawes/racer) code completion
-4. Rust standard lib sources
+4. [rustfmt](https://github.com/rust-lang-nursery/rustfmt) code formatter
+5. Rust standard lib sources
 
 ## Installation
 
 If [Anaconda](https://gitub.com/DamnWidget/anaconda) is not already installed you must install it using the `Command Palette`,
-if it's already installed just skip to the [Install Rustc](https://github.com/DamnWidget/anaconda_rust#install-rustc) section.
+if it's already installed just skip to the [Install Rustc](https://github.com/DamnWidget/anaconda_rust#install-rust) section.
 
 ### Install Anaconda
 
@@ -47,7 +48,7 @@ We can simply install rust in GNU/Linux and OS X copying and pasting the followi
 
 `curl -sSf https://static.rust-lang.org/rustup.sh | sh`
 
-The command above will donwload and install the last stable rust version into your `/usr/loca/` directory (you may need root access
+The command above will donwload and install the last stable rust version into your `/usr/local/` directory (you may need root access
 to do so).
 
 *Note*: All major GNU/Linux distributions offer *rust* as a pre-compiled binary in their package manager systems, you can install it
@@ -73,7 +74,7 @@ version of the Microsoft Visual C++ compiler.
 
 ### Install Racer
 
-Is racer is already installed in your system just skip to the [Install AnacondaRUST](https://github.com/DamnWidget/anaconda_rust#install-anacondarust)
+If racer is already installed in your system just skip to the [Install rustfmt](https://github.com/DamnWidget/anaconda_rust#install-rustfmt)
 section. Racer is easily installed using `cargo` as:
 
 ```bash
@@ -81,6 +82,17 @@ cargo install racer
 ```
 
 That will download all the source code, compile and install racer into your cargo binary directory, cargo is great.
+
+### Install rustfmt
+
+If rustfmt is already installed in your system just skip to the [Install AnacondaRUST](https://github.com/DamnWidget/anaconda_rust#install-anacondarust)
+section. Racer is easily installed using `cargo` as:
+
+```bash
+cargo install rustfmt
+```
+
+The comand avobe will download compile and install `rustfmt` in your system, again, cargo is great.
 
 ### Install AnacondaRUST
 
@@ -134,7 +146,7 @@ AnacondaRUST settings to prevent future problems.
 ## Linter Options
 
 AnacondaRUST (obviously) includes a linter for Rust code, the linter runs asynchronous as usual so it will be relatively fast even
-to run it in `always` fashion, but it up to you to run it with another behavior you like.
+to run it in `always` fashion, but is up to you to run it with another behavior you like.
 
 ### Disable the linter
 
@@ -142,5 +154,14 @@ AnacondaRUST linter is enabled by default, it can be totally disabled setting `a
 
 ## License
 
-As usual for all my Sublime Text plugins, this software is licensed under the [GPLv3](https://github.com/DamnWidget/anaconda_php/blob/master/LICENSE) terms.
+As usual for all my Sublime Text plugins, this software is licensed under the [GPLv3](https://github.com/DamnWidget/anaconda_rust/blob/master/LICENSE) terms.
 
+
+## Donations
+
+Please donate to help keep this project alive.
+
+[![PayPal][paypal-donate-image]][paypal-donate-link]
+
+[paypal-donate-image]: https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif
+[paypal-donate-link]: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=KP7PAHR962UGG&lc=US&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted

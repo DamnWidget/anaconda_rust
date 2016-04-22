@@ -38,7 +38,6 @@ class RustFMT(Command):
                 'vid': self.vid
             })
         except Exception as error:
-            print('Me la comes doblada !!!!!!!!!!!!!!!!!!!!!!!!111')
             logging.error(error)
             trback = traceback.format_exc()
             logging.debug(trback)
