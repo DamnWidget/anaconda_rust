@@ -8,16 +8,18 @@ AnacondaRUST has been tested in *GNU/Linux*, *OS X* and *Windows 10* with excell
 is in a very early state and probably there are bugs to fix and things to improve. The current status in the different platforms
 is:
 
-	* *GNU/Linux*: **Stable**
-	* *OS X*: **Stable**
-	* *Windows*: **Stable**
+| OS | Status |
+| --- | --- |
+| **GNU/Linux** | stable |
+| **OS X** | stable |
+| **Windows** | stable |
 
 ## Dependencies
 
-	1- [Anaconda](https://github.com/DamnWidget/anaconda) plugin for Sublime Text 3
-	2- Rust compiler ([rustc](https://www.rust-lang.org/)) and cargo
-	3- [Racer](https://github.com/phildawes/racer) code completion
-	4- Rust standard lib sources
+1. [Anaconda](https://github.com/DamnWidget/anaconda) plugin for Sublime Text 3
+2. Rust compiler ([rustc](https://www.rust-lang.org/)) and cargo
+3. [Racer](https://github.com/phildawes/racer) code completion
+4. Rust standard lib sources
 
 ## Installation
 
@@ -26,9 +28,9 @@ if it's already installed just skip to the [Install Rustc](https://github.com/Da
 
 ### Install Anaconda
 
-	1- Show the Command Palette (`cmd+shift+p` on OS X or `ctrl+shit+p` on Linux/Windows)
-	2- Type `install`, then select `Package Control: Install package` from the options list
-	3- Type `anaconda` and press `enter`
+1. Show the Command Palette (`cmd+shift+p` on OS X or `ctrl+shit+p` on Linux/Windows)
+2. Type `install`, then select `Package Control: Install package` from the options list
+3. Type `anaconda` and press `enter`
 
 ### Install Rust
 
@@ -84,9 +86,9 @@ That will download all the source code, compile and install racer into your carg
 
 To install AnacondaRUST you just need to follow the steps below:
 
-	1- Show the Command Palete (`cmd+shit+p` on OS X or `ctrl+shift+p` on Linux/Windows)
-	2- Type `install` then select `Package Control: Install package` from the options list
-	3- Type `anaconda_rust` and press `enter`
+1. Show the Command Palete (`cmd+shit+p` on OS X or `ctrl+shift+p` on Linux/Windows)
+2. Type `install` then select `Package Control: Install package` from the options list
+3. Type `anaconda_rust` and press `enter`
 
 ## Configure AnacondaRUST
 
