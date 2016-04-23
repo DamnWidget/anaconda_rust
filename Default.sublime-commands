@@ -2,5 +2,9 @@
 	{
 		"caption": "Anaconda: Format Rust Document Style",
 		"command": "anaconda_rust_fmt"
+	},
+	{
+		"caption": "Anaconda: Goto Rust Definition",
+		"command": "rust_goto"
 	}
 ]
