@@ -1,0 +1,4 @@
+Changes in 0.1.1
+================
+
+ - Fixed problems on Windows
