@@ -1,0 +1,8 @@
+Changes in 0.1.0
+================
+
+ - First working version of AnacondaRUST
+ - Rust code autocompletion trough *racer*
+ - Rust code auto formating trough *rustfmt*
+ - Rust code linting trough *rustc*
+ - Powered by Anaconda (https://github.com/DamnWidget/anaconda)
