@@ -151,6 +151,19 @@ AnacondaRUST (obviously) includes a linter for Rust code, the linter runs asynch
 
 AnacondaRUST linter is enabled by default, it can be totally disabled setting `anaconda_rust_linting` to `false` in the configuration.
 
+### Goto Definition
+
+AnacondaRUST inculdes a Goto Definition feature but it does not add key bindings by default. You can access the `Goto Rust Definition`
+feature trough the `Command Palette`, anyway, if you want to add a key binding for it you could use something like:
+
+```json
+{
+	"command": "rust_goto", "keys": ["ctrl+r", "ctrl+g"], "context": [
+		{"key": "selector", "operator": "equal", "operand": "source.rust"}
+	]
+}
+```
+
 ## License
 
 As usual for all my Sublime Text plugins, this software is licensed under the [GPLv3](https://github.com/DamnWidget/anaconda_rust/blob/master/LICENSE) terms.
