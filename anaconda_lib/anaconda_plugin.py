@@ -8,6 +8,7 @@ try:
     from anaconda.anaconda_lib.helpers import is_code
     from anaconda.listeners import linting, completion
     from anaconda.anaconda_lib.callback import Callback
+    from anaconda.anaconda_lib.jediusages import JediUsages
     from anaconda.version import version as anaconda_version
     from anaconda.anaconda_lib.progress_bar import ProgressBar
     from anaconda.anaconda_lib.helpers import prepare_send_data
@@ -19,6 +20,7 @@ except ImportError:
         from Anaconda.anaconda_lib.helpers import is_code
         from Anaconda.listeners import linting, completion
         from Anaconda.anaconda_lib.callback import Callback
+        from Anaconda.anaconda_lib.jediusages import JediUsages
         from Anaconda.version import version as anaconda_version
         from Anaconda.anaconda_lib.progress_bar import ProgressBar
         from Anaconda.anaconda_lib.helpers import prepare_send_data
@@ -39,5 +41,5 @@ if ANACONDA_PLUGIN_AVAILABLE:
     __all__ += [
         'Worker', 'Callback', 'ProgressBar', 'anaconda_sublime', 'is_code',
         'anaconda_version', 'linting', 'completion', 'anaconda_helpers',
-        'prepare_send_data'
+        'prepare_send_data', 'JediUsages'
     ]

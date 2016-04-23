@@ -37,15 +37,15 @@ class RustFMT(Command):
                 'uid': self.uid,
                 'vid': self.vid
             })
-        except Exception as error:
-            logging.error(error)
+        except:
+            logging.error(self.error)
             trback = traceback.format_exc()
             logging.debug(trback)
             logging.debug('Settings: {0}'.format(self.settings))
             print(trback)
             self.callback({
                 'success': False,
-                'error': error,
+                'error': self.error,
                 'uid': self.uid,
                 'vid': self.vid
             })
@@ -67,6 +67,7 @@ class RustFMT(Command):
         os.remove(self.filename)
 
         if err != '':
+            self.error = err
             raise Exception(err)
 
         return '\n'.join(output.splitlines()[2:])

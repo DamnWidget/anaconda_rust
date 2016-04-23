@@ -3,6 +3,7 @@
 # This program is Free Software see LICENSE file for details
 
 from .rustfmt import AnacondaRustFmt
+from .goto_definition import RustGoto
 
 
-__all__ = ['AnacondaRustFmt']
+__all__ = ['RustGoto', 'AnacondaRustFmt']

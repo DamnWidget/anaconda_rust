@@ -2,6 +2,8 @@
 # Copyright (C) 2016 - Oscar Campos <oscar.campos@member.fsf.org>
 # This program is Free Software see LICENSE file for details
 
+import tempfile
+
 import sublime
 
 from .anaconda_plugin import anaconda_helpers
@@ -17,6 +19,22 @@ def get_settings(view, name, default=None):
     plugin_settings = sublime.load_settings('AnacondaRUST.sublime-settings')
     return view.settings().get(name, plugin_settings.get(name, default))
 
+
+def file_directory():
+    """Returns the given file directory
+    """
+
+    if int(sublime.version()) >= 3080:
+        # extract_variables was added to ST3 rev 3080
+        return sublime.active_window().extract_variables().get('file_path')
+
+    folders = sublime.active_window().folders()
+    if len(folders) > 0:
+        return folders[0]
+
+    return tempfile.gettempdir()
+
+
 # reuse anaconda helper functions
 get_view = anaconda_helpers.get_view
 active_view = anaconda_helpers.active_view
@@ -26,5 +44,4 @@ get_window_view = anaconda_helpers.get_window_view
 
 __all__ = [
     'get_settings', 'active_view', 'get_view', 'get_window_view',
-    'prepare_send_data'
 ]

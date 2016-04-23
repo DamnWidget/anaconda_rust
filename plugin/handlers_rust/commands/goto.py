@@ -16,7 +16,7 @@ from process import spawn
 PIPE = subprocess.PIPE
 
 
-class AutoComplete(Command):
+class Goto(Command):
     """Run racer
     """
 
@@ -24,7 +24,7 @@ class AutoComplete(Command):
         self.vid = vid
         self.filename = filename
         self.settings = settings
-        super(AutoComplete, self).__init__(callback, uid)
+        super(Goto, self).__init__(callback, uid)
 
     def run(self):
         """Run the command
@@ -33,29 +33,28 @@ class AutoComplete(Command):
         try:
             self.callback({
                 'success': True,
-                'completions': self.completions(),
+                'goto': self.get_definitions(),
                 'uid': self.uid,
                 'vid': self.vid
             })
-        except:
-            logging.error('The underlying Jedi library as raised an exception')
-            logging.error(self.error)
+        except Exception as error:
+            logging.error(error)
             logging.debug(traceback.format_exc().splitlines())
 
             self.callback({
                 'success': False,
-                'error': str(self.error),
+                'error': str(error),
                 'uid': self.uid,
                 'vid': self.vid
             })
 
-    def completions(self):
-        """Call racer and get back a formated list of completions
+    def get_definitions(self):
+        """Call racer and get back the definition data
         """
 
-        completions = []
+        matches = []
         args = shlex.split(
-            '{0} -i tab-text complete-with-snippet {1} {2} {3}'.format(
+            '{0} -i tab-text find-definition {1} {2} {3}'.format(
                 self.settings.get('racer_binary_path', 'racer'),
                 self.settings.get('row', 0)+1,  # ST3 counts rows from 0
                 self.settings.get('col', 0),
@@ -78,35 +77,13 @@ class AutoComplete(Command):
         os.remove(self.filename)
 
         if err != '':
-            self.error = err
             raise Exception(err)
 
-        lguide = self._calculate_lguide(output)
-
         for line in output.splitlines():
             if not line.startswith('MATCH'):
                 continue
 
-            _, completion, snippet, _, _, _, _type, info = line.split('\t')
-            completions.append((
-                '{0}{1} {2} {3}'.format(
-                    completion, ' ' * (lguide - len(completion)),
-                    _type[0].lower(), info
-                ), snippet
-            ))
+            _, elem, row, col, path, _, _ = line.split('\t')
+            matches.append((path, int(row), int(col)))
 
-        return completions
-
-    def _calculate_lguide(self, output):
-        """Calculate the max string for components and return it back
-        """
-
-        lguide = 0
-        for line in output.splitlines():
-            if not line.startswith('MATCH'):
-                continue
-
-            comp_string = line.split('\t')[1]
-            lguide = max(lguide, len(comp_string))
-
-        return lguide
+        return matches

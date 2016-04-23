@@ -4,7 +4,7 @@
 
 from lib import anaconda_handler
 
-from .commands import AutoComplete
+from .commands import AutoComplete, Goto
 
 
 class RacerHandler(anaconda_handler.AnacondaHandler):
@@ -18,3 +18,9 @@ class RacerHandler(anaconda_handler.AnacondaHandler):
         """
 
         AutoComplete(self.callback, self.uid, self.vid, filename, settings)
+
+    def goto(self, filename=None, settings=None):
+        """Call goto
+        """
+
+        Goto(self.callback, self.uid, self.vid, filename, settings)

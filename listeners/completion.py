@@ -7,8 +7,8 @@ import tempfile
 
 import sublime
 
-from ..anaconda_lib.helpers import get_settings
 from ..anaconda_lib.anaconda_plugin import anaconda_helpers
+from ..anaconda_lib.helpers import get_settings, file_directory
 from ..anaconda_lib.anaconda_plugin import completion, Worker, is_code
 
 ags = anaconda_helpers.get_settings
@@ -45,7 +45,7 @@ class RustCompletionEventListener(completion.AnacondaCompletionEventListener):
 
         code = view.substr(sublime.Region(0, view.size()))
         # the JonServer deletes the temp file so we don't worry
-        fd, path = tempfile.mkstemp(suffix=".rs")
+        fd, path = tempfile.mkstemp(suffix=".rs", dir=file_directory())
         with os.fdopen(fd, "w") as tmp:
             tmp.write(code)
 
@@ -59,10 +59,7 @@ class RustCompletionEventListener(completion.AnacondaCompletionEventListener):
             'filename': path,
             'settings': {
                 'racer_binary_path': racer,
-                'rust_src_path': get_settings(
-                    view, 'rust_src_path',
-                    os.environ.get('RUST_SRC_PATH', '')
-                ),
+                'rust_src_path': get_settings(view, 'rust_src_path'),
                 'row': row,
                 'col': col
             },
