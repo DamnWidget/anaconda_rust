@@ -18,8 +18,6 @@ class RustCompletionEventListener(completion.AnacondaCompletionEventListener):
     """AnacondaRUST completion event listener class
     """
 
-    _just_completed = False
-
     def on_query_completions(self, view, prefix, locations):
         """Sublime Text autocompletion event handler
         """
@@ -39,7 +37,6 @@ class RustCompletionEventListener(completion.AnacondaCompletionEventListener):
             cpl = self.completions
             self.completions = []
             self.ready_from_defer = False
-            RustCompletionEventListener._just_completed = True
 
             return (cpl, completion_flags)
 

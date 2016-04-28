@@ -20,6 +20,16 @@ def get_settings(view, name, default=None):
     return view.settings().get(name, plugin_settings.get(name, default))
 
 
+def set_setting(view, name, value):
+    """Set settings
+    """
+
+    if view is None:
+        return
+
+    view.settings().set(name, value)
+
+
 def file_directory():
     """Returns the given file directory
     """

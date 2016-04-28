@@ -56,7 +56,7 @@ class RustFMT(Command):
 
         args = shlex.split('{0} --write-mode=display {1}'.format(
             self.settings.get('rustfmt_binary_path', 'rustfmt'), self.filename
-        ))
+        ), posix=os.name != 'nt')
         proc = spawn(args, stdout=PIPE, stderr=PIPE, cwd=os.getcwd())
         output, err = proc.communicate()
         if sys.version_info >= (3, 0):

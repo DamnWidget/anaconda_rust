@@ -24,52 +24,53 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
 
     def run(self, edit):
 
-        if self.data is None:
-            try:
-                messages = {
-                    'start': 'Auto formatting file...',
-                    'end': 'done!',
-                    'fail': 'The auto formatting failed!',
-                    'timeout': 'The auto formatiing timed out!'
-                }
-                self.pbar = ProgressBar(messages)
-                self.pbar.start()
-                self.view.set_read_only(True)
-
-                rustfmt = get_settings(
-                        self.view, 'rustfmt_binary_path', 'rustfmt'
-                )
-                if rustfmt == '':
-                    rustfmt = 'rustfmt'
-
-                self.code = self.view.substr(
-                    sublime.Region(0, self.view.size())
-                )
-
-                # the JonServer deletes the temp file so we don't worry
-                fd, path = tempfile.mkstemp(suffix=".rs")
-                with os.fdopen(fd, "w") as tmp:
-                    tmp.write(self.code)
-
-                data = {
-                    'vid': self.view.id(),
-                    'filename': path,
-                    'settings': {'rustfmt_binary_path': rustfmt},
-                    'method': 'format',
-                    'handler': 'rustfmt'
-                }
-                timeout = get_settings(self.view, 'rust_rustfmt_timeout', 1)
-
-                callback = Callback(timeout=timeout)
-                callback.on(success=self.prepare_data)
-                callback.on(error=self.on_failure)
-                callback.on(timeout=self.on_failure)
-
-                Worker().execute(callback, **data)
-            except:
-                logging.error(traceback.format_exc())
-        else:
+        if self.data is not None:
             self.update_buffer(edit)
+            return
+
+        try:
+            messages = {
+                'start': 'Auto formatting file...',
+                'end': 'done!',
+                'fail': 'The auto formatting failed!',
+                'timeout': 'The auto formatiing timed out!'
+            }
+            self.pbar = ProgressBar(messages)
+            self.pbar.start()
+            self.view.set_read_only(True)
+
+            rustfmt = get_settings(
+                self.view, 'rustfmt_binary_path', 'rustfmt'
+            )
+            if rustfmt == '':
+                rustfmt = 'rustfmt'
+
+            self.code = self.view.substr(
+                sublime.Region(0, self.view.size())
+            )
+
+            # the JonServer deletes the temp file so we don't worry
+            fd, path = tempfile.mkstemp(suffix=".rs")
+            with os.fdopen(fd, "w") as tmp:
+                tmp.write(self.code)
+
+            data = {
+                'vid': self.view.id(),
+                'filename': path,
+                'settings': {'rustfmt_binary_path': rustfmt},
+                'method': 'format',
+                'handler': 'rustfmt'
+            }
+            timeout = get_settings(self.view, 'rust_rustfmt_timeout', 1)
+
+            callback = Callback(timeout=timeout)
+            callback.on(success=self.prepare_data)
+            callback.on(error=self.on_failure)
+            callback.on(timeout=self.on_failure)
+
+            Worker().execute(callback, **data)
+        except:
+            logging.error(traceback.format_exc())
 
     def is_enabled(self):
         """Determine if this command is enabled or not
@@ -98,7 +99,7 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
         """
 
         view = get_window_view(self.data['vid'])
-        if self.code != self.data.get('output'):
+        if self.sanitize(self.code) != self.sanitize(self.data.get('output')):
             region = sublime.Region(0, view.size())
             view.replace(edit, region, self.data.get('output'))
             if get_settings(view, 'rust_format_on_save'):
@@ -106,3 +107,9 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
 
         self.data = None
         self.code = None
+
+    def sanitize(self, text):
+        """Remove blank lines from text and trim it
+        """
+
+        return os.linesep.join([s for s in text.splitlines() if s]).strip()

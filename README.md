@@ -29,9 +29,9 @@ if it's already installed just skip to the [Install Rustc](https://github.com/Da
 
 ### Install Anaconda
 
-1. Show the Command Palette (`cmd+shift+p` on OS X or `ctrl+shit+p` on Linux/Windows)
+1. Show the Command Palette (`Cmd + Shift + P` on OS X or `Ctrl + Shift + P` on Linux/Windows)
 2. Type `install`, then select `Package Control: Install package` from the options list
-3. Type `anaconda` and press `enter`
+3. Type `anaconda` and press `Enter`
 
 ### Install Rust
 
@@ -44,11 +44,11 @@ doubts.
 
 #### GNU/Linux and OS X
 
-We can simply install rust in GNU/Linux and OS X copying and pasting the following command in a terminal:
+We can simply install rust in GNU/Linux and OS X by copying and pasting the following command in a terminal:
 
 `curl -sSf https://static.rust-lang.org/rustup.sh | sh`
 
-The command above will donwload and install the last stable rust version into your `/usr/local/` directory (you may need root access
+The command above will download and install the last stable rust version into your `/usr/local/` directory (you may need root access
 to do so).
 
 *Note*: All major GNU/Linux distributions offer *rust* as a pre-compiled binary in their package manager systems, you can install it
@@ -58,7 +58,7 @@ using your distribution package manager if you want, whatever works for you shou
 
 The easiest way to install rust in Windows is by downloading the Windows binary installers (.msi) from https://www.rust-lang.org/downloads.html
 take into account that there are two different versions of the C/C++ Application Binary Interface (ABI) one for GNU and other for MSVC
-which one to pick is a very important decission as it will determine if you can compile Rust code that binds with C or C++ libraries
+which one to pick is a very important decision as it will determine if you can compile Rust code that binds with C or C++ libraries
 in your system (for example rust-crypto).
 
 It is important to understand that to compile some rust packages that includes some C bindings you need to install a compiler that
@@ -86,21 +86,21 @@ That will download all the source code, compile and install racer into your carg
 ### Install rustfmt
 
 If rustfmt is already installed in your system just skip to the [Install AnacondaRUST](https://github.com/DamnWidget/anaconda_rust#install-anacondarust)
-section. Racer is easily installed using `cargo` as:
+section. rustfmt is easily installed using `cargo` as:
 
 ```bash
 cargo install rustfmt
 ```
 
-The comand avobe will download compile and install `rustfmt` in your system, again, cargo is great.
+The command above will download compile and install `rustfmt` in your system, again, cargo is great.
 
 ### Install AnacondaRUST
 
 To install AnacondaRUST you just need to follow the steps below:
 
-1. Show the Command Palete (`cmd+shit+p` on OS X or `ctrl+shift+p` on Linux/Windows)
+1. Show the Command Palette (`Cmd + Shift + P` on OS X or `Ctrl + Shift + P` on Linux/Windows)
 2. Type `install` then select `Package Control: Install package` from the options list
-3. Type `anaconda_rust` and press `enter`
+3. Type `anaconda_rust` and press `Enter`
 
 ## Configure AnacondaRUST
 
@@ -112,7 +112,7 @@ perfect scenario that probably is not gonna happen so read carefully the steps b
 
 You may be wondering why I want you to download Rust source code if you already installed rust in the previous section, the reason is
 simple, `racer` needs access to the rust's source code to be able to offer auto completion for the rust's standard library. The Rust
-sources can be downloaded from their site https://www.rust-lang.org/downloads.html just donwload the source for the same version that
+sources can be downloaded from their site https://www.rust-lang.org/downloads.html just download the source for the same version that
 you already installed in your system.
 
 ### Configure Binary Paths
@@ -140,7 +140,7 @@ configuration like:
 ```
 
 Set the `RUST_SRC_PATH` environment variable and leeaving the `rust_src_path` config empty may work in Operating Systems where the
-environment vars are passed to the Sublime Text 3 executable, sadly this doesn't always works so I really recommend to set your
+environment vars are passed to the Sublime Text 3 executable, sadly this doesn't always work so I really recommend to set your
 AnacondaRUST settings to prevent future problems.
 
 ## Linter Options
@@ -153,8 +153,8 @@ AnacondaRUST linter is enabled by default, it can be totally disabled setting `a
 
 ### Goto Definition
 
-AnacondaRUST inculdes a Goto Definition feature but it does not add key bindings by default. You can access the `Goto Rust Definition`
-feature trough the `Command Palette`, anyway, if you want to add a key binding for it you could use something like:
+AnacondaRUST includes a Goto Definition feature but it does not add key bindings by default. You can access the `Goto Rust Definition`
+feature through the `Command Palette`, anyway, if you want to add a key binding for it you could use something like:
 
 ```json
 {

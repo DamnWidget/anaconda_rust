@@ -44,7 +44,7 @@ class RustCLint(object):
         os.chdir(os.path.dirname(self.filename))
         args = shlex.split('{0} -Zparse-only {1}'.format(
             self.settings.get('rustc_binary_path', 'rustc'),
-            os.path.basename(self.filename))
+            os.path.basename(self.filename)), posix=os.name != 'nt'
         )
         proc = spawn(args, stdout=PIPE, stderr=PIPE, cwd=os.getcwd())
         _, self.output = proc.communicate()

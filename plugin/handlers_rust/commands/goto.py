@@ -56,10 +56,10 @@ class Goto(Command):
         args = shlex.split(
             '{0} -i tab-text find-definition {1} {2} {3}'.format(
                 self.settings.get('racer_binary_path', 'racer'),
-                self.settings.get('row', 0)+1,  # ST3 counts rows from 0
+                self.settings.get('row', 0) + 1,  # ST3 counts rows from 0
                 self.settings.get('col', 0),
                 self.filename
-            )
+            ), posix=os.name != 'nt'
         )
         env = os.environ.copy()
         rust_src_path = self.settings.get('rust_src_path')

@@ -18,4 +18,4 @@ class AutoRustFmtListener(sublime_plugin.EventListener):
 
         if is_code(view, lang='rust', ignore_comments=True):
             if get_settings(view, 'rust_format_on_save', False):
-                view.run_command('anaconda_rust_fmt')
+                    view.run_command('anaconda_rust_fmt')
