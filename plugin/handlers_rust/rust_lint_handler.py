@@ -37,19 +37,19 @@ class RustLintHandler(anaconda_handler.AnacondaHandler):
                 func(settings, code, filename)
 
         if len(self._errors) == 0 and len(self._failures) > 0:
-            return {
+            self.callback({
                 'success': False,
                 'errors': ', '.join([str(e) for e in self._failures]),
                 'uid': self.uid,
                 'vid': self.vid
-            }
+            })
 
-        return {
+        self.callback({
             'success': True,
             'errors': self._errors,
             'uid': self.uid,
             'vid': self.vid
-        }
+        })
 
     def rustclint(self, settings, code=None, filename=None):
         """Run the rustc linter
