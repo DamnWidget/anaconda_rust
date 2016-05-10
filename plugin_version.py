@@ -13,4 +13,4 @@ ver = message_data.splitlines()[-2].split(':')[0].strip().replace('"', '')
 version = tuple([int(i) for i in ver.split('.')])
 
 # Minimum required anaconda version
-anaconda_required_version = (1, 3, 0)
+anaconda_required_version = (1, 4, 25)
