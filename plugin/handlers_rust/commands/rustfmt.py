@@ -64,7 +64,8 @@ class RustFMT(Command):
             err = err.decode('utf8')
 
         # delete temporary file
-        os.remove(self.filename)
+        if os.path.exists(self.filename):
+            os.remove(self.filename)
 
         if err != '':
             self.error = err

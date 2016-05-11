@@ -74,7 +74,8 @@ class Goto(Command):
             err = err.decode('utf8')
 
         # delete temporary file
-        os.remove(self.filename)
+        if os.path.exists(self.filename):
+            os.remove(self.filename)
 
         if err != '':
             raise Exception(err)

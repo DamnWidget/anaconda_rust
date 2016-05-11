@@ -4,7 +4,11 @@
 
 import tempfile
 
-import sublime
+try:
+    import sublime
+except ImportError:
+    # we can't import sublime module outside ST3 context
+    pass
 
 from .anaconda_plugin import anaconda_helpers
 

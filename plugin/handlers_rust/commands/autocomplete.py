@@ -38,9 +38,9 @@ class AutoComplete(Command):
                 'vid': self.vid
             })
         except:
-            logging.error('The underlying Jedi library as raised an exception')
-            logging.error(self.error)
+            logging.error('The underlying racer tool raised an exception')
             logging.debug(traceback.format_exc().splitlines())
+            logging.error(self.error)
 
             self.callback({
                 'success': False,
@@ -75,7 +75,8 @@ class AutoComplete(Command):
             err = err.decode('utf8')
 
         # delete temporary file
-        os.remove(self.filename)
+        if os.path.exists(self.filename):
+            os.remove(self.filename)
 
         if err != '':
             self.error = err
