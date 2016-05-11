@@ -37,14 +37,14 @@ class AutoComplete(Command):
                 'uid': self.uid,
                 'vid': self.vid
             })
-        except:
+        except Exception as error:
             logging.error('The underlying racer tool raised an exception')
-            logging.debug(traceback.format_exc().splitlines())
-            logging.error(self.error)
+            logging.error(error)
+            logging.debug(traceback.format_exc())
 
             self.callback({
                 'success': False,
-                'error': str(self.error),
+                'error': str(error),
                 'uid': self.uid,
                 'vid': self.vid
             })
@@ -65,7 +65,7 @@ class AutoComplete(Command):
         env = os.environ.copy()
         rust_src_path = self.settings.get('rust_src_path')
         if rust_src_path is None or rust_src_path == '':
-            rust_src_path = os.environ['RUST_SRC_PATH']
+            rust_src_path = os.environ.get('RUST_SRC_PATH', '')
 
         env['RUST_SRC_PATH'] = rust_src_path
         proc = spawn(args, stdout=PIPE, stderr=PIPE, cwd=os.getcwd(), env=env)
@@ -79,7 +79,6 @@ class AutoComplete(Command):
             os.remove(self.filename)
 
         if err != '':
-            self.error = err
             raise Exception(err)
 
         lguide = self._calculate_lguide(output)

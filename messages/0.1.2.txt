@@ -1,0 +1,5 @@
+Changes in 0.1.2
+================
+
+## Fixes
+	 - Fixed unhadnled exception when no file was passed to commands
