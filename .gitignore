@@ -1,3 +1,21 @@
+# Python
+*.py[cod]d$
+__pycache__
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib64
+
 # Compiled files
 *.o
 *.so
