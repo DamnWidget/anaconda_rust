@@ -1,0 +1,6 @@
+Changes in 0.1.3
+================
+
+## Fixes
+	 - Racer v1.2.10 introduced an incompatible change in their text tabular
+	   text format that made anacondaRUST crash, fixed it
