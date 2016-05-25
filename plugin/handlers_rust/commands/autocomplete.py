@@ -87,7 +87,13 @@ class AutoComplete(Command):
             if not line.startswith('MATCH'):
                 continue
 
-            _, completion, snippet, _, _, _, _type, info = line.split('\t')
+            try:
+                _, completion, snippet, _, _, _, _type, info = line.split('\t')
+            except ValueError:
+                # racer 1.2.10 added a new `doc` field
+                _, completion, snippet, _, _, _, _type, info, doc = \
+                    line.split('\t')
+
             completions.append((
                 '{0}{1} {2} {3}'.format(
                     completion, ' ' * (lguide - len(completion)),
