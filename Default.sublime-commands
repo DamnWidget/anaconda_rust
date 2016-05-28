@@ -6,5 +6,9 @@
 	{
 		"caption": "Anaconda: Goto Rust Definition",
 		"command": "rust_goto"
+	},
+	{
+		"caption": "Anaconda: Show Rust Documentation",
+		"command": "rust_doc"
 	}
 ]

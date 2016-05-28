@@ -1,0 +1,21 @@
+[
+	{
+		"caption": "Anaconda",
+		"id": "anaconda_context",
+		"children":
+		[
+			{
+				"command": "anaconda_rust_fmt",
+				"caption": "Format Rust Document Style"
+			},
+			{
+				"command": "rust_goto",
+				"caption": "Goto Rust Definition"
+			},
+			{
+				"command": "rust_doc",
+				"caption": "Show Rust Documentation"
+			}
+		]
+	}
+]
