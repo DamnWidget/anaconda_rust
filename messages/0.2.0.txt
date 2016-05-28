@@ -1,0 +1,8 @@
+Changes in 0.2.0
+================
+
+## Fixes
+     - Added timeout callbakcs to clean orphan tmp files
+
+## Features
+ 	 - Added new command `doc` to show objects documentation (available for racer >= 1.2.10)

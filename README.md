@@ -164,6 +164,19 @@ feature through the `Command Palette`, anyway, if you want to add a key binding 
 }
 ```
 
+### Show Documentation
+
+If racer 1.2.10 or higher is installed, anacondaRUST can offer documentation using the `Control Palette` or the `Contextual Menu`, you
+can also add a shortcut like:
+
+```json
+{
+	"command": "rust_doc", "keys": ["ctrl+r", "ctrl+d"], "context": [
+		{"key": "selector", "operator": "eual", "operan": "source.rust"}
+	]
+}
+```
+
 ## License
 
 As usual for all my Sublime Text plugins, this software is licensed under the [GPLv3](https://github.com/DamnWidget/anaconda_rust/blob/master/LICENSE) terms.
