@@ -6,6 +6,7 @@ import os
 import logging
 import tempfile
 import traceback
+from functools import partial
 
 import sublime
 import sublime_plugin
@@ -66,7 +67,7 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
             callback = Callback(timeout=timeout)
             callback.on(success=self.prepare_data)
             callback.on(error=self.on_failure)
-            callback.on(timeout=self.on_failure)
+            callback.on(timeout=partial(self.clean_tmp_file, path))
 
             Worker().execute(callback, **data)
         except:
@@ -113,3 +114,12 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
         """
 
         return os.linesep.join([s for s in text.splitlines() if s]).strip()
+
+    def clean_tmp_file(self, path):
+        """Clean the tmp file at timeout
+        """
+
+        try:
+            os.remove(path)
+        except:
+            pass

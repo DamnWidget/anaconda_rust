@@ -4,9 +4,11 @@
 
 import os
 import tempfile
+from functools import partial
 
 import sublime
 
+from ..anaconda_lib.anaconda_plugin import Callback
 from ..anaconda_lib.anaconda_plugin import anaconda_helpers
 from ..anaconda_lib.helpers import get_settings, file_directory
 from ..anaconda_lib.anaconda_plugin import completion, Worker, is_code
@@ -41,7 +43,7 @@ class RustCompletionEventListener(completion.AnacondaCompletionEventListener):
             return (cpl, completion_flags)
 
         code = view.substr(sublime.Region(0, view.size()))
-        # the JonServer deletes the temp file so we don't worry
+        # the JsonServer should delete the tmp file but we add a timeout
         fd, path = tempfile.mkstemp(suffix=".rs", dir=file_directory())
         with os.fdopen(fd, "w") as tmp:
             tmp.write(code)
@@ -63,10 +65,25 @@ class RustCompletionEventListener(completion.AnacondaCompletionEventListener):
             'method': 'autocomplete',
             'handler': 'racer'
         }
-        Worker().execute(self._complete, **data)
+        Worker().execute(
+            Callback(
+                on_success=self._complete,
+                on_timeout=partial(self.clean_tmp_file, path)
+            ),
+            **data
+        )
 
     def on_modified(self, view):
         """Called after changes has been made to a view.
         """
 
         return
+
+    def clean_tmp_file(self, path):
+        """Clean the tmp file at  timeout
+        """
+
+        try:
+            os.remove(path)
+        except:
+            pass

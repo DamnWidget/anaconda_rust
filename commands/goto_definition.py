@@ -9,9 +9,9 @@ from functools import partial
 import sublime
 import sublime_plugin
 
-from ..anaconda_lib.anaconda_plugin import Worker
 from ..anaconda_lib.anaconda_plugin import is_code
 from ..anaconda_lib.anaconda_plugin import JediUsages
+from ..anaconda_lib.anaconda_plugin import Worker, Callback
 from ..anaconda_lib.helpers import get_settings, file_directory
 
 
@@ -44,6 +44,13 @@ class RustGoto(sublime_plugin.TextCommand):
                 'method': 'goto',
                 'handler': 'racer'
             }
+            Worker().execute(
+                Callback(
+                    on_success=partial(JediUsages(self).process, False),
+                    on_timeout=partial(self.clean_tmp_file, path)
+                ),
+                **data
+            )
             Worker().execute(partial(JediUsages(self).process, False), **data)
         except:
             pass
@@ -56,3 +63,12 @@ class RustGoto(sublime_plugin.TextCommand):
             return False
 
         return is_code(self.view, lang='rust')
+
+    def clean_tmp_file(self, path):
+        """Clean the tmp file at timeout
+        """
+
+        try:
+            os.remove(path)
+        except:
+            pass
