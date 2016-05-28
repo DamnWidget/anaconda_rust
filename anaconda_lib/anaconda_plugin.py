@@ -4,6 +4,7 @@
 
 ANACONDA_PLUGIN_AVAILABLE = False
 try:
+    from anaconda.commands import doc
     from anaconda.anaconda_lib.worker import Worker
     from anaconda.anaconda_lib.helpers import is_code
     from anaconda.listeners import linting, completion
@@ -16,6 +17,7 @@ try:
     from anaconda.anaconda_lib.linting import sublime as anaconda_sublime
 except ImportError:
     try:
+        from Anaconda.commands import doc
         from Anaconda.anaconda_lib.worker import Worker
         from Anaconda.anaconda_lib.helpers import is_code
         from Anaconda.listeners import linting, completion
@@ -41,5 +43,5 @@ if ANACONDA_PLUGIN_AVAILABLE:
     __all__ += [
         'Worker', 'Callback', 'ProgressBar', 'anaconda_sublime', 'is_code',
         'anaconda_version', 'linting', 'completion', 'anaconda_helpers',
-        'prepare_send_data', 'JediUsages'
+        'prepare_send_data', 'JediUsages', 'doc'
     ]
