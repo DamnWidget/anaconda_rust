@@ -24,7 +24,7 @@ is:
 
 ## Installation
 
-If [Anaconda](https://gitub.com/DamnWidget/anaconda) is not already installed you must install it using the `Command Palette`,
+If [Anaconda](https://github.com/DamnWidget/anaconda) is not already installed you must install it using the `Command Palette`,
 if it's already installed just skip to the [Install Rustc](https://github.com/DamnWidget/anaconda_rust#install-rust) section.
 
 ### Install Anaconda
