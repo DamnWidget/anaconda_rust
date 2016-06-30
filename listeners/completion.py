@@ -68,6 +68,7 @@ class RustCompletionEventListener(completion.AnacondaCompletionEventListener):
         Worker().execute(
             Callback(
                 on_success=self._complete,
+                on_failure=partial(self.clean_tmp_file, path),
                 on_timeout=partial(self.clean_tmp_file, path)
             ),
             **data
@@ -79,8 +80,8 @@ class RustCompletionEventListener(completion.AnacondaCompletionEventListener):
 
         return
 
-    def clean_tmp_file(self, path):
-        """Clean the tmp file at  timeout
+    def clean_tmp_file(self, path, data):
+        """Clean the tmp file at  timeout and errors
         """
 
         try:
