@@ -70,7 +70,7 @@ class RustDoc(doc.AnacondaDoc):
 
         return is_code(self.view, lang='rust')
 
-    def clean_tmp_file(self, path):
+    def clean_tmp_file(self, path, data):
         """Clean the tmp file at timeout
         """
 
