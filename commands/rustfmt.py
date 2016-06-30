@@ -59,6 +59,7 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
                 'vid': self.view.id(),
                 'filename': path,
                 'settings': {'rustfmt_binary_path': rustfmt},
+                'wd': self.view.file_name(),
                 'method': 'format',
                 'handler': 'rustfmt'
             }

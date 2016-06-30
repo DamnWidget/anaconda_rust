@@ -24,6 +24,7 @@ class RustFMT(Command):
         self.vid = vid
         self.filename = filename
         self.settings = settings
+        self.wd = wd
         super(RustFMT, self).__init__(callback, uid)
 
     def run(self):
@@ -54,9 +55,19 @@ class RustFMT(Command):
         """Run the rustfmt command in a file
         """
 
-        args = shlex.split('{0} --write-mode=display {1}'.format(
-            self.settings.get('rustfmt_binary_path', 'rustfmt'), self.filename
-        ), posix=os.name != 'nt')
+        if self.wd is not None:
+            wd = os.path.dirname(self.wd)
+        else:
+            wd = os.getcwd()
+
+        args = shlex.split(
+            '{0} --write-mode=display --config-path {1} {2}'.format(
+                self.settings.get('rustfmt_binary_path', 'rustfmt'),
+                wd,
+                self.filename
+            ),
+            posix=os.name != 'nt')
+
         proc = spawn(args, stdout=PIPE, stderr=PIPE, cwd=os.getcwd())
         output, err = proc.communicate()
         if sys.version_info >= (3, 0):
@@ -71,4 +82,4 @@ class RustFMT(Command):
             self.error = err
             raise Exception(err)
 
-        return '\n'.join(output.splitlines()[2:])
+        return '\n'.join(output.splitlines()[3:])
