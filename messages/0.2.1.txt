@@ -1,0 +1,6 @@
+Changes in 0.2.1
+================
+
+## Fixes
+     - Fixed problem with unicode in env parameter in Popup, resolves #9
+     - Improved the way that orphan tmp files are cleaned up
