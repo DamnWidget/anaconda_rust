@@ -68,7 +68,16 @@ class AutoComplete(Command):
             rust_src_path = os.environ.get('RUST_SRC_PATH', '')
 
         env['RUST_SRC_PATH'] = rust_src_path
-        proc = spawn(args, stdout=PIPE, stderr=PIPE, cwd=os.getcwd(), env=env)
+        try:
+            proc = spawn(
+                args, stdout=PIPE, stderr=PIPE, cwd=os.getcwd(), env=env)
+        except RuntimeError:
+            new_env = []
+            for elem in env:
+                new_env.append(str(elem))
+            proc = spawn(
+                args, stdout=PIPE, stderr=PIPE, cwd=os.getcwd(), env=new_env)
+
         output, err = proc.communicate()
         if sys.version_info >= (3, 0):
             output = output.decode('utf8')
