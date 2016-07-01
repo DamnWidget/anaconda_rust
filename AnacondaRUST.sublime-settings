@@ -44,5 +44,13 @@
 		This id the default time that anaconda will wait for rustfmt to finish
 		formatting files, after that time it will rturn a timeout failure
 	*/
-	"rust_rustfmt_timeout": 1  // seconds
+	"rust_rustfmt_timeout": 1,  // seconds
+
+	/*
+		Path to the rustfmt.toml configuration file
+
+		If empty, anaconda_rust uses the project directory if a project is
+		active or the directory where current file is being edited
+	*/
+	"rust_rustfmt_config_path": ""
 }

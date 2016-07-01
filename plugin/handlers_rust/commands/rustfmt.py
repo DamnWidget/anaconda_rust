@@ -24,7 +24,6 @@ class RustFMT(Command):
         self.vid = vid
         self.filename = filename
         self.settings = settings
-        self.wd = wd
         super(RustFMT, self).__init__(callback, uid)
 
     def run(self):
@@ -55,15 +54,10 @@ class RustFMT(Command):
         """Run the rustfmt command in a file
         """
 
-        if self.wd is not None:
-            wd = os.path.dirname(self.wd)
-        else:
-            wd = os.getcwd()
-
         args = shlex.split(
             '{0} --write-mode=display --config-path {1} {2}'.format(
                 self.settings.get('rustfmt_binary_path', 'rustfmt'),
-                wd,
+                self.settings.get('config_path'),
                 self.filename
             ),
             posix=os.name != 'nt')

@@ -55,11 +55,17 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
             with os.fdopen(fd, "w") as tmp:
                 tmp.write(self.code)
 
+            config_path = get_settings(self.view, 'rust_rustfmt_config_path')
+            if config_path is None or config_path == '':
+                config_path = self._get_working_directory()
+
             data = {
                 'vid': self.view.id(),
                 'filename': path,
-                'settings': {'rustfmt_binary_path': rustfmt},
-                'wd': self.view.file_name(),
+                'settings': {
+                    'rustfmt_binary_path': rustfmt,
+                    'config_path': config_path
+                },
                 'method': 'format',
                 'handler': 'rustfmt'
             }
@@ -124,3 +130,14 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
             os.remove(path)
         except:
             pass
+
+    def _get_working_directory(self):
+        """Return back the project directory if any or the file one
+        """
+
+        project_data = sublime.active_window().project_data()
+        if project_data is not None:
+            if len(project_data['folders']) > 0:
+                return project_data['folders'][0]['path']
+
+        return os.path.dirname(self.view.file_name())
