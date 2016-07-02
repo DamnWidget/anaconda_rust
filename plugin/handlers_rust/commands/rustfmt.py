@@ -30,6 +30,7 @@ class RustFMT(Command):
         """Run the command
         """
 
+        self.error = ''
         try:
             self.callback({
                 'success': True,
@@ -68,6 +69,9 @@ class RustFMT(Command):
             output = output.decode('utf8')
             err = err.decode('utf8')
 
+        # clean output
+        result = self._clean_output(output)
+
         # delete temporary file
         if os.path.exists(self.filename):
             os.remove(self.filename)
@@ -76,4 +80,22 @@ class RustFMT(Command):
             self.error = err
             raise Exception(err)
 
-        return '\n'.join(output.splitlines()[3:])
+        return result
+
+    def _clean_output(self, output):
+        """Clean lines added by rustfmt to the output
+        """
+
+        with open(self.filename, 'r') as f:
+            sample = f.readline().strip()
+
+        result = ''
+        buf = output.splitlines()
+        for i in range(len(buf)):
+            print(buf[i].strip())
+            if buf[i].strip() != sample:
+                continue
+            result = os.linesep.join(buf[i:])
+            break
+
+        return result
