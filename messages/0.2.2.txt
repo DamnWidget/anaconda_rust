@@ -1,0 +1,9 @@
+Changes in 0.2.2
+================
+
+## Features
+        - Added `rust_rustfmt_config_path` option that can be used to pass the
+          path to a `rustfmt.toml` configuration file.
+        - Now rustfmt uses the current project path as config path for default or
+          the directory where the file being edited is contained if a project is
+          not present
