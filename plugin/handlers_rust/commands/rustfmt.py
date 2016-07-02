@@ -92,7 +92,6 @@ class RustFMT(Command):
         result = ''
         buf = output.splitlines()
         for i in range(len(buf)):
-            print(buf[i].strip())
             if buf[i].strip() != sample:
                 continue
             result = os.linesep.join(buf[i:])
