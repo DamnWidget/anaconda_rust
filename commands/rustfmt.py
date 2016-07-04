@@ -132,12 +132,11 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
             pass
 
     def _get_working_directory(self):
-        """Return back the project directory if any or the file one
+        """Return back the project file directory if any or current file one
         """
 
-        project_data = sublime.active_window().project_data()
-        if project_data is not None:
-            if len(project_data['folders']) > 0:
-                return project_data['folders'][0]['path']
+        pfilename = sublime.active_window().project_file_name()
+        if pfilename is not None:
+            return os.path.dirname(pfilename)
 
         return os.path.dirname(self.view.file_name())

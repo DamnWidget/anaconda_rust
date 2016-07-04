@@ -1,0 +1,6 @@
+Changes in 0.2.3
+================
+
+## Changes
+	- Now config_path is set to the project file directory if any or the being
+	  edited diretory if is not manually set by the user.
