@@ -2,16 +2,12 @@
 # Copyright (C) 2016 - Oscar Campos <oscar.campos@member.fsf.org>
 # This program is Free Software see LICENSE file for details
 
-import os
-import tempfile
-from functools import partial
-
 import sublime
 
 from ..anaconda_lib import RACER_VERSION
+from ..anaconda_lib.helpers import get_settings
 from ..anaconda_lib.anaconda_plugin import is_code, doc
 from ..anaconda_lib.anaconda_plugin import Worker, Callback
-from ..anaconda_lib.helpers import get_settings, file_directory
 
 
 class RustDoc(doc.AnacondaDoc):
@@ -24,11 +20,6 @@ class RustDoc(doc.AnacondaDoc):
 
         try:
             code = self.view.substr(sublime.Region(0, self.view.size()))
-            # the JsonServer should delete the tmp file but we add a timeout
-            fd, path = tempfile.mkstemp(suffix=".rs", dir=file_directory())
-            with os.fdopen(fd, "w") as tmp:
-                tmp.write(code)
-
             row, col = self.view.rowcol(self.view.sel()[0].begin())
             racer = get_settings(self.view, 'racer_binary_path', 'racer')
             if racer == '':
@@ -36,12 +27,13 @@ class RustDoc(doc.AnacondaDoc):
 
             data = {
                 'vid': self.view.id(),
-                'filename': path,
+                'filename': self.view.file_name(),
                 'settings': {
                     'racer_binary_path': racer,
                     'rust_src_path': get_settings(self.view, 'rust_src_path'),
                     'row': row,
-                    'col': col
+                    'col': col,
+                    'source': code
                 },
                 'method': 'doc',
                 'handler': 'racer'
@@ -50,8 +42,8 @@ class RustDoc(doc.AnacondaDoc):
             Worker().execute(
                 Callback(
                     on_success=self.prepare_data,
-                    on_failure=partial(self.clean_tmp_file, path),
-                    on_timeout=partial(self.clean_tmp_file, path)
+                    on_failure=self._on_failure,
+                    on_timeout=self._on_timeout
                 ),
                 **data
             )
@@ -70,11 +62,15 @@ class RustDoc(doc.AnacondaDoc):
 
         return is_code(self.view, lang='rust')
 
-    def clean_tmp_file(self, path, data):
-        """Clean the tmp file at timeout
+    def _on_failure(self, data):
+        """Fired on failures from the callback
         """
 
-        try:
-            os.remove(path)
-        except:
-            pass
+        print('anaconda_racer: completion error')
+        print(data['error'])
+
+    def _on_timeout(self, data):
+        """Fired when the callback times out
+        """
+
+        print('Rust goto definition timed out')

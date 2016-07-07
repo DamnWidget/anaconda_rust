@@ -12,8 +12,6 @@ import subprocess
 
 from commands.base import Command
 
-from process import spawn
-
 PIPE = subprocess.PIPE
 
 
@@ -51,11 +49,11 @@ class Doc(Command):
             })
 
     def doc(self):
-        """Call racer and get back documentation (only on racer >= 1.2.10
+        """Call racer and get back documentation (only on racer >= 1.2.10)
         """
 
         args = shlex.split(
-            '{0} -i tab-text complete-with-snippet {1} {2} {3}'.format(
+            '{0} -i tab-text complete-with-snippet {1} {2} {3} -'.format(
                 self.settings.get('racer_binary_path', 'racer'),
                 self.settings.get('row', 0) + 1,  # ST3 counts rows from 0
                 self.settings.get('col', 0),
@@ -68,18 +66,19 @@ class Doc(Command):
             rust_src_path = os.environ.get('RUST_SRC_PATH', '')
 
         env['RUST_SRC_PATH'] = rust_src_path
-        proc = spawn(args, stdout=PIPE, stderr=PIPE, cwd=os.getcwd(), env=env)
-        output, err = proc.communicate()
+        read, write = os.pipe()
+        try:
+            os.write(write, self.settings['source'])
+        except TypeError:
+            os.write(write, self.settings['source'].encode())
+        os.close(write)
+        output = subprocess.check_output(
+            args, stdin=read, cwd=os.getcwd(), env=env)
         if sys.version_info >= (3, 0):
             output = output.decode('utf8')
-            err = err.decode('utf8')
 
-        # delete temporary file
-        if os.path.exists(self.filename):
-            os.remove(self.filename)
-
-        if err != '':
-            raise Exception(err)
+        if 'RUST_BACKTRACE' in output:
+            raise Exception(output)
 
         for line in output.splitlines():
             if not line.startswith('MATCH'):
@@ -96,5 +95,8 @@ class Doc(Command):
 
             if doc == "\"\"":
                 doc = ""
+
+            if doc == '':
+                return doc
 
             return ast.literal_eval(doc)

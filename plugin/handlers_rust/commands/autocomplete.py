@@ -11,10 +11,6 @@ import subprocess
 
 from commands.base import Command
 
-from process import spawn
-
-PIPE = subprocess.PIPE
-
 
 class AutoComplete(Command):
     """Run racer
@@ -54,12 +50,13 @@ class AutoComplete(Command):
         """
 
         completions = []
+
         args = shlex.split(
-            '{0} -i tab-text complete-with-snippet {1} {2} {3}'.format(
+            '{0} -i tab-text complete-with-snippet {1} {2} {3} -'.format(
                 self.settings.get('racer_binary_path', 'racer'),
                 self.settings.get('row', 0) + 1,  # ST3 counts rows from 0
                 self.settings.get('col', 0),
-                self.filename
+                os.path.dirname(self.filename)
             ), posix=os.name != 'nt'
         )
         env = os.environ.copy()
@@ -67,28 +64,31 @@ class AutoComplete(Command):
         if rust_src_path is None or rust_src_path == '':
             rust_src_path = os.environ.get('RUST_SRC_PATH', '')
 
+        r, w = os.pipe()
+        os.write(w, self.settings['source'].encode())
+        os.close(w)
         env['RUST_SRC_PATH'] = rust_src_path
+        read, write = os.pipe()
         try:
-            proc = spawn(
-                args, stdout=PIPE, stderr=PIPE, cwd=os.getcwd(), env=env)
-        except RuntimeError:
+            os.write(write, self.settings['source'])
+        except TypeError:
+            os.write(write, self.settings['source'].encode())
+        os.close(write)
+        try:
+            output = subprocess.check_output(
+                args, stdin=read, cwd=os.getcwd(), env=env)
+        except subprocess.CalledProcessError:
             new_env = []
             for elem in env:
                 new_env.append(str(elem))
-            proc = spawn(
-                args, stdout=PIPE, stderr=PIPE, cwd=os.getcwd(), env=new_env)
+            output = subprocess.check_output(
+                args, stdin=read, cwd=os.getcwd(), env=new_env)
 
-        output, err = proc.communicate()
         if sys.version_info >= (3, 0):
             output = output.decode('utf8')
-            err = err.decode('utf8')
 
-        # delete temporary file
-        if os.path.exists(self.filename):
-            os.remove(self.filename)
-
-        if err != '':
-            raise Exception(err)
+        if 'RUST_BACKTRACE' in output:
+            raise Exception(output)
 
         lguide = self._calculate_lguide(output)
 

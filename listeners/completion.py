@@ -2,15 +2,11 @@
 # Copyright (C) 2016 - Oscar Campos <oscar.campos@member.fsf.org>
 # This program is Free Software see LICENSE file for details
 
-import os
-import tempfile
-from functools import partial
-
 import sublime
 
+from ..anaconda_lib.helpers import get_settings
 from ..anaconda_lib.anaconda_plugin import Callback
 from ..anaconda_lib.anaconda_plugin import anaconda_helpers
-from ..anaconda_lib.helpers import get_settings, file_directory
 from ..anaconda_lib.anaconda_plugin import completion, Worker, is_code
 
 ags = anaconda_helpers.get_settings
@@ -43,11 +39,6 @@ class RustCompletionEventListener(completion.AnacondaCompletionEventListener):
             return (cpl, completion_flags)
 
         code = view.substr(sublime.Region(0, view.size()))
-        # the JsonServer should delete the tmp file but we add a timeout
-        fd, path = tempfile.mkstemp(suffix=".rs", dir=file_directory())
-        with os.fdopen(fd, "w") as tmp:
-            tmp.write(code)
-
         row, col = view.rowcol(locations[0])
         racer = get_settings(view, 'racer_binary_path', 'racer')
         if racer == '':
@@ -55,12 +46,13 @@ class RustCompletionEventListener(completion.AnacondaCompletionEventListener):
 
         data = {
             'vid': view.id(),
-            'filename': path,
+            'filename': view.file_name(),
             'settings': {
                 'racer_binary_path': racer,
                 'rust_src_path': get_settings(view, 'rust_src_path'),
                 'row': row,
-                'col': col
+                'col': col,
+                'source': code,
             },
             'method': 'autocomplete',
             'handler': 'racer'
@@ -68,8 +60,8 @@ class RustCompletionEventListener(completion.AnacondaCompletionEventListener):
         Worker().execute(
             Callback(
                 on_success=self._complete,
-                on_failure=partial(self.clean_tmp_file, path),
-                on_timeout=partial(self.clean_tmp_file, path)
+                on_failure=self._on_failure,
+                on_timeout=self._on_timeout
             ),
             **data
         )
@@ -80,12 +72,15 @@ class RustCompletionEventListener(completion.AnacondaCompletionEventListener):
 
         return
 
-    def clean_tmp_file(self, path, data):
-        """Clean the tmp file at  timeout and errors
+    def _on_timeout(self, data):
+        """Log into the ST3 console
         """
 
+        print('Rust completion timed out')
+
+    def _on_failure(self, data):
+        """Log into the ST3 console
+        """
+
+        print('anaconda_racer: completion error')
         print(data['error'])
-        try:
-            os.remove(path)
-        except:
-            pass
