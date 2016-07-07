@@ -84,6 +84,7 @@ class RustCompletionEventListener(completion.AnacondaCompletionEventListener):
         """Clean the tmp file at  timeout and errors
         """
 
+        print(data['error'])
         try:
             os.remove(path)
         except:
