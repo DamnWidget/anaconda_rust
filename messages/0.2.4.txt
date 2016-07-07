@@ -1,0 +1,6 @@
+Changes in 0.2.4
+================
+
+## Fixes
+    - Fix bug in rust formatter that prevented it to work when modules were defined
+
