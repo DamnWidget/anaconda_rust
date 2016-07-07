@@ -15,6 +15,7 @@ from ..anaconda_lib.anaconda_plugin import is_code
 from ..anaconda_lib.anaconda_plugin import ProgressBar
 from ..anaconda_lib.anaconda_plugin import Worker, Callback
 from ..anaconda_lib.helpers import get_settings, get_window_view
+from ..anaconda_lib.helpers import file_directory
 
 
 class AnacondaRustFmt(sublime_plugin.TextCommand):
@@ -51,7 +52,7 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
             )
 
             # the JonServer deletes the temp file so we don't worry
-            fd, path = tempfile.mkstemp(suffix=".rs")
+            fd, path = tempfile.mkstemp(suffix=".rs", dir=file_directory())
             with os.fdopen(fd, "w") as tmp:
                 tmp.write(self.code)
 
@@ -92,6 +93,7 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
 
         self.pbar.terminate(status=self.pbar.Status.FAILURE)
         self.view.set_read_only(False)
+        print(args[0]['error'])
 
     def prepare_data(self, data):
         """Prepare the returned data to overwrite our buffer
