@@ -1,0 +1,6 @@
+Changes in 0.2.5
+================
+
+## Improvements
+    - Use the standard input when calling racer instead of write a tmpfile with the views unsaved buffer
+

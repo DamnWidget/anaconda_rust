@@ -11,6 +11,8 @@ import subprocess
 
 from commands.base import Command
 
+from process import spawn
+
 PIPE = subprocess.PIPE
 
 
@@ -65,19 +67,30 @@ class Goto(Command):
             rust_src_path = os.environ['RUST_SRC_PATH']
 
         env['RUST_SRC_PATH'] = rust_src_path
-        read, write = os.pipe()
+        kwargs = {
+            'stdin': PIPE, 'stdout': PIPE, 'stderr': PIPE,
+            'cwd': os.getcwd(), 'env': env
+        }
         try:
-            os.write(write, self.settings['source'])
-        except TypeError:
-            os.write(write, self.settings['source'].encode())
-        os.close(write)
-        output = subprocess.check_output(
-            args, stdin=read, cwd=os.getcwd(), env=env)
+
+            racer = spawn(args, **kwargs)
+        except subprocess.CalledProcessError:
+            new_env = []
+            for elem in env:
+                new_env.append(str(elem))
+            racer = spawn(args, **kwargs)
+
+        src = self.settings['source']
+        if sys.version_info >= (3, 0):
+            src = self.settings['source'].encode()
+
+        output, error = racer.communicate(src)
         if sys.version_info >= (3, 0):
             output = output.decode('utf8')
+            error = error.decode('utf8')
 
-        if 'RUST_BACKTRACE' in output:
-            raise Exception(output)
+        if error != '':
+            raise Exception(error)
 
         for line in output.splitlines():
             if not line.startswith('MATCH'):
