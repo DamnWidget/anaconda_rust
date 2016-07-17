@@ -5,7 +5,7 @@
 import os
 import subprocess
 
-from .helpers import get_settings, active_view
+from anaconda_rust.anaconda_lib.helpers import get_settings, active_view
 
 RACER_VERSION = None
 

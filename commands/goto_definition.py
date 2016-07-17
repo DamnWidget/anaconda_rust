@@ -7,10 +7,10 @@ from functools import partial
 import sublime
 import sublime_plugin
 
-from ..anaconda_lib.helpers import get_settings
-from ..anaconda_lib.anaconda_plugin import is_code
-from ..anaconda_lib.anaconda_plugin import JediUsages
-from ..anaconda_lib.anaconda_plugin import Worker, Callback
+from anaconda_rust.anaconda_lib.helpers import get_settings
+from anaconda_rust.anaconda_lib.anaconda_plugin import is_code
+from anaconda_rust.anaconda_lib.anaconda_plugin import JediUsages
+from anaconda_rust.anaconda_lib.anaconda_plugin import Worker, Callback
 
 
 class RustGoto(sublime_plugin.TextCommand):

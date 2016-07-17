@@ -19,7 +19,7 @@ is:
 1. [Anaconda](https://github.com/DamnWidget/anaconda) plugin for Sublime Text 3
 2. Rust compiler ([rustc](https://www.rust-lang.org/)) and cargo
 3. [Racer](https://github.com/phildawes/racer) code completion
-4. [rustfmt](https://github.com/rust-lang-nursery/rustfmt) code formatter
+4. [rustfmt](https://github.com/rust-lang-nursery/rustfmt) >= 0.5.0 code formatter
 5. Rust standard lib sources
 
 ## Installation
@@ -93,6 +93,8 @@ cargo install rustfmt
 ```
 
 The command above will download compile and install `rustfmt` in your system, again, cargo is great.
+
+*Note*: install `rustfmt` 0.5.0 or better for a smoothly integration, older versions give problems when used in anaconda_rust
 
 ### Install AnacondaRUST
 

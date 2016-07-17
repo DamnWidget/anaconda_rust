@@ -4,10 +4,10 @@
 
 import sublime
 
-from ..anaconda_lib.helpers import get_settings
-from ..anaconda_lib.anaconda_plugin import Callback
-from ..anaconda_lib.anaconda_plugin import anaconda_helpers
-from ..anaconda_lib.anaconda_plugin import completion, Worker, is_code
+from anaconda_rust.anaconda_lib.helpers import get_settings
+from anaconda_rust.anaconda_lib.anaconda_plugin import Callback
+from anaconda_rust.anaconda_lib.anaconda_plugin import anaconda_helpers
+from anaconda_rust.anaconda_lib.anaconda_plugin import completion, Worker, is_code
 
 ags = anaconda_helpers.get_settings
 

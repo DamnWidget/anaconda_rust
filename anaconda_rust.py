@@ -5,10 +5,10 @@
 """AnacondaRUST is a Rust IDE plugin for Sublime Text 3
 """
 
-from .plugin_version import anaconda_required_version
+from anaconda_rust.plugin_version import anaconda_required_version
 
-from .anaconda_lib import check_racer_version
-from .anaconda_lib.anaconda_plugin import anaconda_version
+from anaconda_rust.anaconda_lib import check_racer_version
+from anaconda_rust.anaconda_lib.anaconda_plugin import anaconda_version
 
 if anaconda_required_version > anaconda_version:
     raise RuntimeError(
@@ -19,8 +19,8 @@ if anaconda_required_version > anaconda_version:
         )
     )
 
-from .commands import *
-from .listeners import *
+from anaconda_rust.commands import *
+from anaconda_rust.listeners import *
 
 
 def plugin_loaded():

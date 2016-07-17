@@ -4,8 +4,10 @@
 
 from functools import partial
 
-from .helpers import get_settings, active_view
-from .anaconda_plugin import anaconda_sublime, Worker, Callback
+from anaconda_rust.anaconda_lib.helpers import get_settings, active_view
+from anaconda_rust.anaconda_lib.anaconda_plugin import (
+    anaconda_sublime, Worker, Callback
+)
 
 
 def run_linter(view=None):

@@ -11,11 +11,11 @@ from functools import partial
 import sublime
 import sublime_plugin
 
-from ..anaconda_lib.anaconda_plugin import is_code
-from ..anaconda_lib.anaconda_plugin import ProgressBar
-from ..anaconda_lib.anaconda_plugin import Worker, Callback
-from ..anaconda_lib.helpers import get_settings, get_window_view
-from ..anaconda_lib.helpers import file_directory
+from anaconda_rust.anaconda_lib.anaconda_plugin import is_code
+from anaconda_rust.anaconda_lib.anaconda_plugin import ProgressBar
+from anaconda_rust.anaconda_lib.anaconda_plugin import Worker, Callback
+from anaconda_rust.anaconda_lib.helpers import get_settings, get_window_view
+from anaconda_rust.anaconda_lib.helpers import file_directory
 
 
 class AnacondaRustFmt(sublime_plugin.TextCommand):

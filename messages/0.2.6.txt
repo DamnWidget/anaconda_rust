@@ -1,0 +1,13 @@
+Changes in 0.2.6
+================
+
+## Fixes
+    - Rustfmt integration is not as good as I would like, big changes regarding
+      it are gonna come in next releases with the addition of a new custom crate
+      that wraps rustfmt and make anaconda able to call Rust code directly from
+      Python, in the meanwhile I switch to write mode `Plain` and recommend
+      `rustfmt` 0.5.0 in the README file, this will hopefully solve:
+      	* #15: Ignore children modules when formatting
+      	* #16: Auto format adds one empty line in the beginning of the file
+      	* #17: Auto-format sometimes deletes code
+

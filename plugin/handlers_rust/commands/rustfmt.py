@@ -56,7 +56,7 @@ class RustFMT(Command):
         """
 
         args = shlex.split(
-            '{0} --write-mode=display --config-path {1} {2}'.format(
+            '{0} --write-mode=plain --config-path {1} {2}'.format(
                 self.settings.get('rustfmt_binary_path', 'rustfmt'),
                 self.settings.get('config_path'),
                 self.filename
@@ -69,8 +69,7 @@ class RustFMT(Command):
             output = output.decode('utf8')
             err = err.decode('utf8')
 
-        # clean output
-        result = self._clean_output(output)
+        result = output
 
         # delete temporary file
         if os.path.exists(self.filename):
@@ -79,22 +78,5 @@ class RustFMT(Command):
         if err != '':
             self.error = err
             raise Exception(err)
-
-        return result
-
-    def _clean_output(self, output):
-        """Clean lines added by rustfmt to the output
-        """
-
-        with open(self.filename, 'r') as f:
-            sample = f.readline().strip()
-
-        result = ''
-        buf = output.splitlines()
-        for i in range(len(buf)):
-            if buf[i].strip() != sample:
-                continue
-            result = os.linesep.join(buf[i:])
-            break
 
         return result

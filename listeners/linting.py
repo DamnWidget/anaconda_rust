@@ -2,9 +2,9 @@
 # Copyright (C) 2016 - Oscar Campos <oscar.campos@member.fsf.org>
 # This program is Free Software see LICENSE file for details
 
-from ..anaconda_lib.sublime import run_linter
-from ..anaconda_lib.anaconda_plugin import linting
-from ..anaconda_lib.helpers import check_linting, get_settings
+from anaconda_rust.anaconda_lib.sublime import run_linter
+from anaconda_rust.anaconda_lib.anaconda_plugin import linting
+from anaconda_rust.anaconda_lib.helpers import check_linting, get_settings
 
 
 class BackgroundLinter(linting.BackgroundLinter):

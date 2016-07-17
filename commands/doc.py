@@ -4,10 +4,10 @@
 
 import sublime
 
-from ..anaconda_lib import RACER_VERSION
-from ..anaconda_lib.helpers import get_settings
-from ..anaconda_lib.anaconda_plugin import is_code, doc
-from ..anaconda_lib.anaconda_plugin import Worker, Callback
+from anaconda_rust.anaconda_lib import RACER_VERSION
+from anaconda_rust.anaconda_lib.helpers import get_settings
+from anaconda_rust.anaconda_lib.anaconda_plugin import is_code, doc
+from anaconda_rust.anaconda_lib.anaconda_plugin import Worker, Callback
 
 
 class RustDoc(doc.AnacondaDoc):
