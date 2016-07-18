@@ -69,7 +69,9 @@ class RustFMT(Command):
             output = output.decode('utf8')
             err = err.decode('utf8')
 
-        result = output
+        header = 'Using rustfmt config file '
+        result = '\n'.join(
+            [l for l in output.splitlines() if not l.startswith(header)])
 
         # delete temporary file
         if os.path.exists(self.filename):
