@@ -1,0 +1,8 @@
+Changes in 0.2.7
+================
+
+## Fixes
+    - For some strange reason, rustfmt adds a log like 'Using rustfmt config
+      file (file_path) to the header of its output even if the configured
+      writer is Plain or Display, we just remove that line from the output if
+      we find it when we run rustfmt.
