@@ -4,8 +4,7 @@
 
 import sublime
 
-from anaconda_rust.anaconda_lib import RACER_VERSION
-from anaconda_rust.anaconda_lib.helpers import get_settings
+from anaconda_rust.anaconda_lib import RUST_VERSION, ANACONDA_READY
 from anaconda_rust.anaconda_lib.anaconda_plugin import is_code, doc
 from anaconda_rust.anaconda_lib.anaconda_plugin import Worker, Callback
 
@@ -21,16 +20,10 @@ class RustDoc(doc.AnacondaDoc):
         try:
             code = self.view.substr(sublime.Region(0, self.view.size()))
             row, col = self.view.rowcol(self.view.sel()[0].begin())
-            racer = get_settings(self.view, 'racer_binary_path', 'racer')
-            if racer == '':
-                racer = 'racer'
-
             data = {
                 'vid': self.view.id(),
-                'filename': self.view.file_name(),
+                'filename': self.view.filename(),
                 'settings': {
-                    'racer_binary_path': racer,
-                    'rust_src_path': get_settings(self.view, 'rust_src_path'),
                     'row': row,
                     'col': col,
                     'source': code
@@ -57,7 +50,7 @@ class RustDoc(doc.AnacondaDoc):
         if len(sublime.active_window().views()) == 0:
             return False
 
-        if RACER_VERSION is not None and RACER_VERSION < (1, 2, 10):
+        if RUST_VERSION is None or not ANACONDA_READY:
             return False
 
         return is_code(self.view, lang='rust')

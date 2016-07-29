@@ -13,8 +13,8 @@ class RustFMTHandler(anaconda_handler.AnacondaHandler):
 
     __handler_type__ = 'rustfmt'
 
-    def format(self, filename=None, settings=None):
+    def format(self, settings=None):
         """Run the rustfmt in a file
         """
 
-        RustFMT(self.callback, self.uid, self.vid, filename, settings)
+        RustFMT(self.callback, self.uid, self.vid, settings)

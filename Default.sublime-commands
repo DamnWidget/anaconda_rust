@@ -10,5 +10,17 @@
 	{
 		"caption": "Anaconda: Show Rust Documentation",
 		"command": "rust_doc"
+	},
+	{
+		"caption": "Anaconda: Set Rustc Path",
+		"command": "anaconda_rust_set_rustc"
+	},
+	{
+		"caption": "Anaconda: Check Rust Sources",
+		"command": "rust_check_sources"
+	},
+	{
+		"caption": "Anaconda: Compile Rust-Anaconda Library',
+		"command": "rust_compile_rust_anaconda"
 	}
 ]

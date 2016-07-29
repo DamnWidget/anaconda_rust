@@ -2,7 +2,8 @@
 # Copyright (C) 2016 - Oscar Campos <oscar.campos@member.fsf.org>
 # This program is Free Software see LICENSE file for details
 
-from anaconda_rust.anaconda_lib.sublime import run_linter
+from anaconda_rust.anaconda_lib import ANACONDA_READY
+from anaconda_rust.anaconda_lib._sublime import run_linter
 from anaconda_rust.anaconda_lib.anaconda_plugin import linting
 from anaconda_rust.anaconda_lib.helpers import check_linting, get_settings
 
@@ -16,6 +17,13 @@ class BackgroundLinter(linting.BackgroundLinter):
         super(BackgroundLinter, self).__init__(**kwargs)
         self.check_auto_lint = True
 
+    def lint(self):
+        """Just disable linting if anaconda_rust is not ready
+        """
+
+        if ANACONDA_READY:
+            super(BackgroundLinter, self).lint()
+
     def on_modified(self, view):
         """Rustc can only work in files not in buffers
         """
@@ -26,3 +34,25 @@ class BackgroundLinter(linting.BackgroundLinter):
                 linting.erase_lint_marks(view)
         else:
             self._erase_marks_if_no_linting(view)
+
+    def on_load(self, view):
+        if ANACONDA_READY:
+            super(BackgroundLinter, self).on_load(view)
+
+    def on_post_save(self, view):
+        if ANACONDA_READY:
+            super(BackgroundLinter, self).on_post_save(view)
+
+    def on_pre_close(self, view):
+        if ANACONDA_READY:
+            super(BackgroundLinter, self).on_pre_close(view)
+
+    def on_activated(self, view):
+        if ANACONDA_READY:
+            super(BackgroundLinter, self).on_activated(view)
+
+    #  def on_focus(self, view):
+        #  if ANACONDA_READY:
+            #  super(BackgroundLinter, self).on_focus(view)
+
+

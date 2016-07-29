@@ -1,0 +1,26 @@
+[package]
+name = "rustanaconda"
+version = "0.1.0"
+authors = ["Oscar Campos <damnwidget@gmail.com>"]
+description = "A fancy name for a simple wrapper around rustfmt and racer for anaconda_rust ST3 package"
+repository = "https://github.com/DamnWidget/rust-anaconda"
+readme = "README.md"
+license = "Apache-2.0"
+include = ["src/*.rs", "Cargo.toml"]
+
+[dependencies]
+libc = "0.2.14"
+rustfmt = "*"
+racer = "*"
+
+[lib]
+crate-type = ["dylib", "rlib"]
+
+[profile.release]
+opt-level = 3
+debug = false
+rpath = false
+lto = false
+debug-assertions = false
+codegen-units = 1
+panic = 'unwind'

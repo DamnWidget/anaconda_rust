@@ -6,8 +6,9 @@ import sublime
 
 from anaconda_rust.anaconda_lib.helpers import get_settings
 from anaconda_rust.anaconda_lib.anaconda_plugin import Callback
+from anaconda_rust.anaconda_lib import RUST_VERSION, ANACONDA_READY
 from anaconda_rust.anaconda_lib.anaconda_plugin import anaconda_helpers
-from anaconda_rust.anaconda_lib.anaconda_plugin import completion, Worker, is_code
+from anaconda_rust.anaconda_lib.anaconda_plugin import completion, Worker, is_code  # noqa
 
 ags = anaconda_helpers.get_settings
 
@@ -21,6 +22,9 @@ class RustCompletionEventListener(completion.AnacondaCompletionEventListener):
         """
 
         if not is_code(view, lang='rust'):
+            return
+
+        if RUST_VERSION is None or not ANACONDA_READY:
             return
 
         if self.ready_from_defer is True:
@@ -48,8 +52,6 @@ class RustCompletionEventListener(completion.AnacondaCompletionEventListener):
             'vid': view.id(),
             'filename': view.file_name(),
             'settings': {
-                'racer_binary_path': racer,
-                'rust_src_path': get_settings(view, 'rust_src_path'),
                 'row': row,
                 'col': col,
                 'source': code,

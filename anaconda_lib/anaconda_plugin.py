@@ -12,9 +12,11 @@ try:
     from anaconda.anaconda_lib.jediusages import JediUsages
     from anaconda.version import version as anaconda_version
     from anaconda.anaconda_lib.progress_bar import ProgressBar
+    from anaconda.anaconda_lib.helpers import create_subprocess
     from anaconda.anaconda_lib.helpers import prepare_send_data
     from anaconda.anaconda_lib import helpers as anaconda_helpers
     from anaconda.anaconda_lib.linting import sublime as anaconda_sublime
+    from anaconda.anaconda_lib.helpers import get_settings as anaconda_get_settings  #noqa
 except ImportError:
     try:
         from Anaconda.commands import doc
@@ -25,9 +27,11 @@ except ImportError:
         from Anaconda.anaconda_lib.jediusages import JediUsages
         from Anaconda.version import version as anaconda_version
         from Anaconda.anaconda_lib.progress_bar import ProgressBar
+        from Anaconda.anaconda_lib.helpers import create_subprocess
         from Anaconda.anaconda_lib.helpers import prepare_send_data
         from Anaconda.anaconda_lib import helpers as anaconda_helpers
         from Anaconda.anaconda_lib.linting import sublime as anaconda_sublime
+        from Anaconda.anaconda_lib.helpers import get_settings as anaconda_get_settings  # noqa
     except ImportError as error:
         print(str(error))
         raise RuntimeError('Anaconda plugin is not installed!')
@@ -43,5 +47,6 @@ if ANACONDA_PLUGIN_AVAILABLE:
     __all__ += [
         'Worker', 'Callback', 'ProgressBar', 'anaconda_sublime', 'is_code',
         'anaconda_version', 'linting', 'completion', 'anaconda_helpers',
-        'prepare_send_data', 'JediUsages', 'doc'
+        'prepare_send_data', 'JediUsages', 'doc', 'create_subprocess',
+        'anaconda_get_settings'
     ]

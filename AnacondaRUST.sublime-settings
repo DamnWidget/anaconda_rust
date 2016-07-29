@@ -17,13 +17,11 @@
 	/*
 		AnacondaRUST binary paths
 
-		Set the location of rustc, racer and rustfmt in your system
+		Set the location of rustc in your system
 		Note: if this settings are left empty Anaconda will try to use
 		the ones that are in your PATH
 	*/
 	"rustc_binary_path": "",
-	"racer_binary_path": "",
-	"rustfmt_binary_path": "",
 
     /*
     	Set the path to your local version of rust source code

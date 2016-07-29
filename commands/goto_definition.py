@@ -7,9 +7,9 @@ from functools import partial
 import sublime
 import sublime_plugin
 
-from anaconda_rust.anaconda_lib.helpers import get_settings
 from anaconda_rust.anaconda_lib.anaconda_plugin import is_code
 from anaconda_rust.anaconda_lib.anaconda_plugin import JediUsages
+from anaconda_rust.anaconda_lib import RUST_VERSION, ANACONDA_READY
 from anaconda_rust.anaconda_lib.anaconda_plugin import Worker, Callback
 
 
@@ -21,16 +21,10 @@ class RustGoto(sublime_plugin.TextCommand):
         try:
             code = self.view.substr(sublime.Region(0, self.view.size()))
             row, col = self.view.rowcol(self.view.sel()[0].begin())
-            racer = get_settings(self.view, 'racer_binary_path', 'racer')
-            if racer == '':
-                racer = 'racer'
-
             data = {
                 'vid': self.view.id(),
                 'filename': self.view.file_name(),
                 'settings': {
-                    'racer_binary_path': racer,
-                    'rust_src_path': get_settings(self.view, 'rust_src_path'),
                     'row': row,
                     'col': col,
                     'source': code
@@ -54,6 +48,9 @@ class RustGoto(sublime_plugin.TextCommand):
         """
 
         if len(sublime.active_window().views()) == 0:
+            return False
+
+        if RUST_VERSION is None or not ANACONDA_READY:
             return False
 
         return is_code(self.view, lang='rust')

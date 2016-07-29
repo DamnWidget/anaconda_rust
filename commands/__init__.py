@@ -5,6 +5,11 @@
 from .doc import RustDoc
 from .rustfmt import AnacondaRustFmt
 from .goto_definition import RustGoto
+from .setrustc import AnacondaRustSetRustc
+from .checksources import CheckRustSources
 
 
-__all__ = ['RustDoc', 'RustGoto', 'AnacondaRustFmt']
+__all__ = [
+    'RustDoc', 'RustGoto', 'AnacondaRustFmt', 'AnacondaRustSetRustc',
+    'CheckRustSources'
+]

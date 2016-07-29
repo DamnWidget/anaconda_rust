@@ -4,18 +4,16 @@
 
 import os
 import logging
-import tempfile
 import traceback
-from functools import partial
 
 import sublime
 import sublime_plugin
 
 from anaconda_rust.anaconda_lib.anaconda_plugin import is_code
 from anaconda_rust.anaconda_lib.anaconda_plugin import ProgressBar
+from anaconda_rust.anaconda_lib import RUST_VERSION, ANACONDA_READY
 from anaconda_rust.anaconda_lib.anaconda_plugin import Worker, Callback
 from anaconda_rust.anaconda_lib.helpers import get_settings, get_window_view
-from anaconda_rust.anaconda_lib.helpers import file_directory
 
 
 class AnacondaRustFmt(sublime_plugin.TextCommand):
@@ -41,20 +39,9 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
             self.pbar.start()
             self.view.set_read_only(True)
 
-            rustfmt = get_settings(
-                self.view, 'rustfmt_binary_path', 'rustfmt'
-            )
-            if rustfmt == '':
-                rustfmt = 'rustfmt'
-
             self.code = self.view.substr(
                 sublime.Region(0, self.view.size())
             )
-
-            # the JonServer deletes the temp file so we don't worry
-            fd, path = tempfile.mkstemp(suffix=".rs", dir=file_directory())
-            with os.fdopen(fd, "w") as tmp:
-                tmp.write(self.code)
 
             config_path = get_settings(self.view, 'rust_rustfmt_config_path')
             if config_path is None or config_path == '':
@@ -62,9 +49,8 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
 
             data = {
                 'vid': self.view.id(),
-                'filename': path,
                 'settings': {
-                    'rustfmt_binary_path': rustfmt,
+                    'source': self.code,
                     'config_path': config_path
                 },
                 'method': 'format',
@@ -75,7 +61,7 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
             callback = Callback(timeout=timeout)
             callback.on(success=self.prepare_data)
             callback.on(error=self.on_failure)
-            callback.on(timeout=partial(self.clean_tmp_file, path))
+            callback.on(timeout=self.on_failure)
 
             Worker().execute(callback, **data)
         except:
@@ -84,6 +70,9 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
     def is_enabled(self):
         """Determine if this command is enabled or not
         """
+
+        if RUST_VERSION is None or not ANACONDA_READY:
+            return False
 
         return is_code(self.view, lang='rust', ignore_comments=True)
 
@@ -109,7 +98,7 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
         """
 
         view = get_window_view(self.data['vid'])
-        if self.sanitize(self.code) != self.sanitize(self.data.get('output')):
+        if self.code != self.data.get('output'):
             region = sublime.Region(0, view.size())
             view.replace(edit, region, self.data.get('output'))
             if get_settings(view, 'rust_format_on_save'):
@@ -117,21 +106,6 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
 
         self.data = None
         self.code = None
-
-    def sanitize(self, text):
-        """Remove blank lines from text and trim it
-        """
-
-        return os.linesep.join([s for s in text.splitlines() if s]).strip()
-
-    def clean_tmp_file(self, path):
-        """Clean the tmp file at timeout
-        """
-
-        try:
-            os.remove(path)
-        except:
-            pass
 
     def _get_working_directory(self):
         """Return back the project file directory if any or current file one
