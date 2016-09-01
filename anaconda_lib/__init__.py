@@ -12,10 +12,10 @@ import urllib.request
 
 import sublime
 
+from anaconda_rust.anaconda_lib.async_proc import AsyncProc
 from anaconda_rust.anaconda_lib.anaconda_plugin import Callback
 from anaconda_rust.anaconda_lib.anaconda_plugin import ProgressBar
 from anaconda_rust.anaconda_lib.helpers import get_settings, active_view
-from anaconda_rust.anaconda_lib.anaconda_plugin import create_subprocess
 from anaconda_rust.anaconda_lib.anaconda_plugin import anaconda_get_settings
 
 RUST_VERSION = None
@@ -59,6 +59,50 @@ def check_rust_version():
         return RUST_VERSION
 
 
+class PanelListener:
+    """Just listen to AsyncProc and update the inner panel
+    """
+
+    def __init__(self, proc, panel):
+        self.proc = proc
+        self.panel = panel
+
+    def notify(self, proc, msg, err=False):
+        """Notification msg coming from the proccess
+        """
+
+        if err is not False:
+            self.err = True
+
+        if proc is None or proc != self.proc:
+            return
+
+        self.panel.run_command(
+            'append', {
+                'characters': msg.decode(),
+                'force': True, 'scroll_to_end': True
+            }
+        )
+
+    def complete(self, proc):
+        """The process has finished
+        """
+
+        if proc is None or proc != self.proc:
+            return
+
+        done = 'Compilation '
+        if proc.status != proc.Status.DONE:
+            done = '{} Success...'.format(done)
+        else:
+            done = '{} done with errors:\n{}'.format(done, proc.error)
+
+        self.panel.run_command(
+            'append',
+            {'characters': done, 'force': True, 'scroll_to_end': True}
+        )
+
+
 def prepare_anaconda_rust(version, path, ifile):
     """
     This is probably the most important function in the whole package.
@@ -82,6 +126,11 @@ def prepare_anaconda_rust(version, path, ifile):
         'timeout': 'Rust environment preparation timed out, retry in 5s'
     })
     prpbar.start()
+
+    view = active_view()
+    _panel = view.window().create_output_panel('anaconda_rust_notifications')
+    _panel.run_command('append',
+                       {'characters': 'Compiling AnacondaRUST', 'force': True})
 
     def _success(resp):
         """Callback for successful operations
@@ -158,7 +207,6 @@ def prepare_anaconda_rust(version, path, ifile):
         else:
             cb({'status': 'succeeded', 'msg': out})
 
-    view = active_view()
     rustc = get_settings(view, 'rustc_binary_path', 'rustc')
     src_path = get_settings(view, 'rust_src_path')
     env_src_path = os.environ.get('RUST_SRC_PATH', '')
@@ -179,8 +227,11 @@ def prepare_anaconda_rust(version, path, ifile):
         python, path, version, cargo,
         src_path if len(src_path) > 0 else env_src_path
     ), posix=os.name != 'nt')
-    p = create_subprocess(args)
-    sublime.set_timeout_async(lambda: _communicate(p, cb, view), 0)
+    p = AsyncProc(cb, args)
+
+    listener = PanelListener(p, _panel)
+    p.add_watcher(listener)
+    sublime.set_timeout_async(lambda: p.run(), 0)
 
 
 def check_rust_sources(version):
