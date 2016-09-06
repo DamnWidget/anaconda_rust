@@ -29,6 +29,13 @@ class RustCLint(object):
         re.MULTILINE | re.UNICODE
     )
 
+    # regexp groups to parse rustc 1.13.x output
+    _regexp_1_13 = re.compile(
+        '^(?:(?P<error>(error|fatal error))|(?P<warning>warning)|'
+        '(?P<info>note|help)):\\s+(?P<message>.+)\\s+'
+        ' --> (?P<file>.+?):(?P<line>\\d+):(?P<col>\\d+)'
+    )
+
     def __init__(self, filename, settings):
         self.filename = filename
         self.settings = settings
@@ -58,10 +65,8 @@ class RustCLint(object):
         """
 
         errors = {'E': [], 'W': [], 'V': []}
-        import logging
-        logging.info(self.output)
         if self.output != '':
-            for match in self._regexp.finditer(self.output):
+            for match in self._version_regex:
                 dict_match = match.groupdict()
                 error_severity, error_type = self._infer_severity(dict_match)
                 errors[error_type].append({
@@ -88,3 +93,24 @@ class RustCLint(object):
             _severity = 'info'
 
         return _severity, _type_dict[_severity]
+
+    @property
+    def _version_regex(self):
+        """Execute the right regexp.finditer depenging on rustc version
+        """
+
+        r = self.settings.get('rustc_binary_path', 'rustc')
+        args = shlex.split('{0} --version'.format(r), posix=os.name != 'nt')
+        p = spawn(args, stdout=PIPE, stderr=PIPE)
+        out, _ = p.communicate()
+        if sys.version_info >= (3,):
+            out = out.decode('utf8')
+
+        if 'rustc' not in out:
+            return []
+
+        v = tuple(int(i) for i in out.split(' ')[1].split('-')[0].split('.'))
+        if v >= (1, 13):
+            return self._regexp_1_13.finditer(self.output)
+
+        return self._regexp.finditer(self.output)
