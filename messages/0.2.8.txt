@@ -1,0 +1,6 @@
+Changes in 0.2.8
+================
+
+## Fixes
+    - Added support for new build error syntax introduced by rustc
+      1.13.0-nightly, resolves #21
