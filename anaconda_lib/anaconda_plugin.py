@@ -14,6 +14,7 @@ try:
     from anaconda.anaconda_lib.progress_bar import ProgressBar
     from anaconda.anaconda_lib.helpers import prepare_send_data
     from anaconda.anaconda_lib import helpers as anaconda_helpers
+    from anaconda.anaconda_lib.explore_panel import ExplorerPanel
     from anaconda.anaconda_lib.linting import sublime as anaconda_sublime
 except ImportError:
     try:
@@ -27,6 +28,7 @@ except ImportError:
         from Anaconda.anaconda_lib.progress_bar import ProgressBar
         from Anaconda.anaconda_lib.helpers import prepare_send_data
         from Anaconda.anaconda_lib import helpers as anaconda_helpers
+        from Anaconda.anaconda_lib.explore_panel import ExplorerPanel
         from Anaconda.anaconda_lib.linting import sublime as anaconda_sublime
     except ImportError as error:
         print(str(error))
@@ -43,5 +45,5 @@ if ANACONDA_PLUGIN_AVAILABLE:
     __all__ += [
         'Worker', 'Callback', 'ProgressBar', 'anaconda_sublime', 'is_code',
         'anaconda_version', 'linting', 'completion', 'anaconda_helpers',
-        'prepare_send_data', 'JediUsages', 'doc'
+        'prepare_send_data', 'JediUsages', 'doc', 'ExplorerPanel'
     ]

@@ -2,14 +2,12 @@
 # Copyright (C) 2016 - Oscar Campos <oscar.campos@member.fsf.org>
 # This program is Free Software see LICENSE file for details
 
-from functools import partial
-
 import sublime
 import sublime_plugin
 
 from anaconda_rust.anaconda_lib.helpers import get_settings
 from anaconda_rust.anaconda_lib.anaconda_plugin import is_code
-from anaconda_rust.anaconda_lib.anaconda_plugin import JediUsages
+from anaconda_rust.anaconda_lib.anaconda_plugin import ExplorerPanel
 from anaconda_rust.anaconda_lib.anaconda_plugin import Worker, Callback
 
 
@@ -40,7 +38,7 @@ class RustGoto(sublime_plugin.TextCommand):
             }
             Worker().execute(
                 Callback(
-                    on_success=partial(JediUsages(self).process, False),
+                    on_success=self._on_success,
                     on_failure=self._on_failure,
                     on_timeout=self._on_timeout
                 ),
@@ -57,6 +55,18 @@ class RustGoto(sublime_plugin.TextCommand):
             return False
 
         return is_code(self.view, lang='rust')
+
+    def _on_success(self, data):
+        """Fired on success operations
+        """
+
+        if not data['goto']:
+            sublime.status_message('Unable to find symbol')
+            return
+
+        ExplorerPanel(self.view, []).show(
+            [{'position': ':'.join((str(e) for e in data['goto'][0]))}]
+        )
 
     def _on_failure(self, data):
         """Fired on failures from the callback

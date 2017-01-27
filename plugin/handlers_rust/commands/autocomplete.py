@@ -82,10 +82,7 @@ class AutoComplete(Command):
                 new_env.append(str(elem))
             racer = spawn(args, **kwargs)
 
-        src = self.settings['source']
-        if sys.version_info >= (3, 0):
-            src = self.settings['source'].encode()
-
+        src = self.settings['source'].encode('utf8')
         output, error = racer.communicate(src)
         if sys.version_info >= (3, 0):
             output = output.decode('utf8')
