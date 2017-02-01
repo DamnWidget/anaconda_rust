@@ -53,8 +53,12 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
 
             # the JonServer deletes the temp file so we don't worry
             fd, path = tempfile.mkstemp(suffix=".rs", dir=file_directory())
-            with os.fdopen(fd, "w") as tmp:
-                tmp.write(self.code)
+            try:
+                with os.fdopen(fd, "wb") as tmp:
+                    tmp.write(self.code.encode('utf-8'))
+            except Exception as e:
+                self.clean_tmp_file(path)
+                raise e
 
             config_path = get_settings(self.view, 'rust_rustfmt_config_path')
             if config_path is None or config_path == '':
