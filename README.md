@@ -141,7 +141,7 @@ configuration like:
 	"rust_src_path": "/home/damnwidget/downloads/languages/rust/sources/1.8.0/src",
 ```
 
-Set the `RUST_SRC_PATH` environment variable and leeaving the `rust_src_path` config empty may work in Operating Systems where the
+Set the `RUST_SRC_PATH` environment variable and leaving the `rust_src_path` config empty may work in Operating Systems where the
 environment vars are passed to the Sublime Text 3 executable, sadly this doesn't always work so I really recommend to set your
 AnacondaRUST settings to prevent future problems.
 
