@@ -1,0 +1,5 @@
+Changes in 0.2.10
+=================
+
+## Fixes
+    - Fixed UnicodeEncodeError exception being raised when running rustfmt
