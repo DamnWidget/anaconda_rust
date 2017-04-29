@@ -27,9 +27,9 @@
 
     /*
     	Set the path to your local version of rust source code
-    	this is neccessary for racer to give you proper standard
+    	this is necessary for racer to give you proper standard
     	library auto completion.
-		Note: if this setting is left empty Anaconda will tr to use
+		Note: if this setting is left empty Anaconda will try to use
 		the environment variable RUST_SRC_PATH
 	*/
 	"rust_src_path": "",
@@ -42,7 +42,7 @@
 
 	/*
 		This id the default time that anaconda will wait for rustfmt to finish
-		formatting files, after that time it will rturn a timeout failure
+		formatting files, after that time it will return a timeout failure
 	*/
 	"rust_rustfmt_timeout": 1,  // seconds
 
