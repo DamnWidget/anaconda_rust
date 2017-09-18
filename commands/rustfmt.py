@@ -56,9 +56,7 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
             with os.fdopen(fd, "w", encoding="utf-8") as tmp:
                 tmp.write(self.code)
 
-            config_path = get_settings(self.view, 'rust_rustfmt_config_path')
-            if config_path is None or config_path == '':
-                config_path = self._get_working_directory()
+            config_path = get_settings(self.view, 'rust_rustfmt_config_path', '')
 
             data = {
                 'vid': self.view.id(),
