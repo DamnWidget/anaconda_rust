@@ -55,16 +55,24 @@ class RustFMT(Command):
         """Run the rustfmt command in a file
         """
 
+        # use the `--config-path` option only when a path is given
+        config_path = self.settings.get('config_path')
+        config_path_option = ''
+        if config_path.strip():
+            config_path_option = '--config-path={}'.format(config_path)
+
         args = shlex.split(
-            '{0} --write-mode=plain --config-path {1} {2}'.format(
+            '{0} --write-mode=plain {1} {2}'.format(
                 self.settings.get('rustfmt_binary_path', 'rustfmt'),
-                self.settings.get('config_path'),
+                config_path_option,
                 self.filename
             ),
             posix=os.name != 'nt')
 
         proc = spawn(args, stdout=PIPE, stderr=PIPE, cwd=os.getcwd())
         output, err = proc.communicate()
+        if proc.returncode != 0:
+            err = output  # rustfmt's err message goes to stdout too
         if sys.version_info >= (3, 0):
             output = output.decode('utf8')
             err = err.decode('utf8')
