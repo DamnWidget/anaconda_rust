@@ -1,0 +1,6 @@
+Changes in 0.2.11
+=================
+
+## Fixes
+- Use rustfmt's `--config-path` option only when it is given.
+- Capture rustfmt's error message (which goes to `stdout`)
