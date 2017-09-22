@@ -107,7 +107,8 @@ class AnacondaRustFmt(sublime_plugin.TextCommand):
         """
 
         view = get_window_view(self.data['vid'])
-        if self.sanitize(self.code) != self.sanitize(self.data.get('output')):
+        output = self.sanitize(self.data.get('output'))
+        if output and self.sanitize(self.code) != output:
             region = sublime.Region(0, view.size())
             view.replace(edit, region, self.data.get('output'))
             if get_settings(view, 'rust_format_on_save'):
