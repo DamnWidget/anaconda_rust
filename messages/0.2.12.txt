@@ -1,0 +1,6 @@
+Changes in 0.2.12
+=================
+
+## Fixes
+- Don't delete entire file contents if rustfmt fails
+- Fixed some configuration file comment typos
