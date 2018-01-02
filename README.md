@@ -174,7 +174,7 @@ can also add a shortcut like:
 ```json
 {
 	"command": "rust_doc", "keys": ["ctrl+r", "ctrl+d"], "context": [
-		{"key": "selector", "operator": "eual", "operan": "source.rust"}
+		{"key": "selector", "operator": "eual", "operand": "source.rust"}
 	]
 }
 ```
